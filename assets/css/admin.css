@@ -1,0 +1,173 @@
+/* Ology Brewing Admin Styles */
+
+.ology-brewing-dashboard {
+    margin-top: 20px;
+}
+
+.ology-brewing-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+    .ology-brewing-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+.ology-brewing-card {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+.ology-brewing-card h2 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #1d2327;
+}
+
+.ology-brewing-logs {
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    padding: 10px;
+    background: #f9f9f9;
+    font-family: 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.ology-brewing-log-entry {
+    margin-bottom: 5px;
+    padding: 4px 8px;
+    border-radius: 3px;
+}
+
+.ology-brewing-log-error {
+    color: #d63638;
+    background: #fcf0f1;
+    border-left: 3px solid #d63638;
+}
+
+.ology-brewing-log-warning {
+    color: #dba617;
+    background: #fcf9e8;
+    border-left: 3px solid #dba617;
+}
+
+.ology-brewing-log-info {
+    color: #00a32a;
+    background: #f0f8f0;
+    border-left: 3px solid #00a32a;
+}
+
+.ology-brewing-log-debug {
+    color: #72aee6;
+    background: #f0f6fc;
+    border-left: 3px solid #72aee6;
+}
+
+.ology-brewing-log-time {
+    color: #666;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.ology-brewing-log-level {
+    font-weight: bold;
+    margin-right: 10px;
+    text-transform: uppercase;
+}
+
+.ology-brewing-log-message {
+    color: #333;
+}
+
+.ology-brewing-log-context {
+    margin-top: 5px;
+    padding: 5px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+}
+
+.ology-brewing-log-context pre {
+    margin: 0;
+    font-size: 11px;
+    color: #666;
+}
+
+.ology-brewing-actions {
+    margin-top: 20px;
+}
+
+.ology-brewing-actions .button {
+    margin-right: 10px;
+}
+
+.ology-brewing-logs-header {
+    margin-bottom: 20px;
+}
+
+.ology-brewing-logs-header .button {
+    margin-right: 10px;
+}
+
+.ology-brewing-logs-container {
+    background: #fff;
+    border: 1px solid #ccd0d4;
+    border-radius: 4px;
+    padding: 20px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.04);
+}
+
+/* Loading states */
+.ology-brewing-loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.ology-brewing-loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: ology-brewing-spin 1s linear infinite;
+}
+
+@keyframes ology-brewing-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Success/Error messages */
+.ology-brewing-notice {
+    padding: 12px;
+    margin: 15px 0;
+    border-left: 4px solid #00a32a;
+    background: #f0f8f0;
+    color: #1d2327;
+}
+
+.ology-brewing-notice.error {
+    border-left-color: #d63638;
+    background: #fcf0f1;
+    color: #d63638;
+}
+
+.ology-brewing-notice.warning {
+    border-left-color: #dba617;
+    background: #fcf9e8;
+    color: #dba617;
+}
