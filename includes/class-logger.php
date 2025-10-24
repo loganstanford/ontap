@@ -6,7 +6,7 @@ class Logger {
     private $log_levels = ['error', 'warning', 'info', 'debug'];
     
     public function __construct() {
-        $this->log_dir = WP_CONTENT_DIR . '/logs/ology-brewing/';
+        $this->log_dir = WP_CONTENT_DIR . '/logs/ontap/';
         $this->ensure_log_directory();
     }
     
@@ -55,7 +55,7 @@ class Logger {
     }
     
     private function write_to_transient($message, $level, $context) {
-        $recent_logs = get_transient('ology_brewing_recent_logs') ?: [];
+        $recent_logs = get_transient('ontap_recent_logs') ?: [];
         $recent_logs[] = [
             'timestamp' => current_time('Y-m-d H:i:s'),
             'level' => $level,
@@ -68,7 +68,7 @@ class Logger {
             $recent_logs = array_slice($recent_logs, -50);
         }
         
-        set_transient('ology_brewing_recent_logs', $recent_logs, HOUR_IN_SECONDS);
+        set_transient('ontap_recent_logs', $recent_logs, HOUR_IN_SECONDS);
     }
     
     private function ensure_log_directory() {
@@ -78,11 +78,11 @@ class Logger {
     }
     
     public function get_recent_logs($limit = 50) {
-        return get_transient('ology_brewing_recent_logs') ?: [];
+        return get_transient('ontap_recent_logs') ?: [];
     }
     
     public function clear_logs() {
-        delete_transient('ology_brewing_recent_logs');
+        delete_transient('ontap_recent_logs');
         
         // Clear log files
         $files = glob($this->log_dir . '*.log*');

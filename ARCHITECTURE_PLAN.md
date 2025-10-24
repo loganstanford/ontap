@@ -1,4 +1,4 @@
-# Ology Brewing System - Architecture Plan
+# OnTap System - Architecture Plan
 
 ## 🎯 Long-term Goal
 
@@ -43,10 +43,10 @@ ology-custom.php (5,000+ lines)
 ### Modern WordPress Plugin Structure
 
 ```
-ology-brewing/
-├── ology-brewing.php                 # Main plugin file
+ontap/
+├── ontap.php                 # Main plugin file
 ├── includes/
-│   ├── class-ology-brewing.php      # Main plugin class
+│   ├── class-ontap.php      # Main plugin class
 │   ├── class-api-client.php          # API abstraction layer
 │   ├── class-sync-manager.php        # Sync orchestration
 │   ├── class-logger.php              # Centralized logging
@@ -276,7 +276,7 @@ WHERE post_type = 'location';
 ### Code Standards
 
 - **PSR-4 Autoloading**: Follow WordPress coding standards
-- **Namespacing**: Use `OlogyBrewing\` namespace
+- **Namespacing**: Use `OnTap\` namespace
 - **Documentation**: PHPDoc for all classes and methods
 - **Testing**: Unit tests for all business logic
 - **Error Handling**: Proper exception handling throughout
@@ -284,8 +284,8 @@ WHERE post_type = 'location';
 ### File Organization
 
 ```
-ology-brewing/
-├── ology-brewing.php              # Plugin header and bootstrap
+ontap/
+├── ontap.php              # Plugin header and bootstrap
 ├── includes/                       # Core classes
 ├── api/                           # API clients
 ├── models/                        # Data models
@@ -347,8 +347,8 @@ CREATE TABLE ology_sync_logs (
 
 ```bash
 # Clone repository
-git clone <repository-url> ology-brewing
-cd ology-brewing
+git clone <repository-url> ontap
+cd ontap
 
 # Install dependencies
 composer install

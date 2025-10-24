@@ -1,6 +1,6 @@
 <?php
 /**
- * Ology Brewing Autoloader
+ * OnTap Autoloader
  * 
  * Simple autoloader following WordPress conventions
  */
@@ -14,17 +14,17 @@ if (!defined('ABSPATH')) {
  * 
  * @param string $class_name The class name to load
  */
-function ology_brewing_autoload($class_name) {
+function ontap_autoload($class_name) {
     // Only handle our namespace
-    if (strpos($class_name, 'OlogyBrewing\\') !== 0) {
+    if (strpos($class_name, 'OnTap\\') !== 0) {
         return;
     }
     
     // Remove namespace prefix
-    $relative_class = substr($class_name, strlen('OlogyBrewing\\'));
+    $relative_class = substr($class_name, strlen('OnTap\\'));
     
     // Convert namespace separators to directory separators
-    $file = OLOGY_BREWING_PLUGIN_DIR . 'includes/' . str_replace('\\', '/', $relative_class) . '.php';
+    $file = ONTAP_PLUGIN_DIR . 'includes/' . str_replace('\\', '/', $relative_class) . '.php';
     
     // Load the file if it exists
     if (file_exists($file)) {
@@ -33,4 +33,4 @@ function ology_brewing_autoload($class_name) {
 }
 
 // Register the autoloader
-spl_autoload_register('ology_brewing_autoload');
+spl_autoload_register('ontap_autoload');

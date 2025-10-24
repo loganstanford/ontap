@@ -2,7 +2,7 @@
 namespace OlogyBrewing;
 
 class CacheManager {
-    private $cache_prefix = 'ology_brewing_';
+    private $cache_prefix = 'ontap_';
     private $default_expiry = 3600; // 1 hour
     
     public function get($key, $default = false) {

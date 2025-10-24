@@ -5,117 +5,117 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div class="wrap">
-    <h1><?php _e('Ology Brewing Settings', 'ology-brewing'); ?></h1>
+    <h1><?php _e('OnTap Settings', 'ontap'); ?></h1>
     
-    <form id="ology-brewing-settings-form">
-        <?php wp_nonce_field('ology_brewing_nonce', 'nonce'); ?>
+    <form id="ontap-settings-form">
+        <?php wp_nonce_field('ontap_nonce', 'nonce'); ?>
         
         <table class="form-table">
             <tr>
-                <th scope="row"><?php _e('Debug Settings', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Debug Settings', 'ontap'); ?></th>
                 <td>
                     <fieldset>
                         <label>
                             <input type="checkbox" name="debug_enabled" value="1" <?php checked($settings['debug_enabled'], true); ?>>
-                            <?php _e('Enable debug logging', 'ology-brewing'); ?>
+                            <?php _e('Enable debug logging', 'ontap'); ?>
                         </label>
                         <p class="description">
-                            <?php _e('When enabled, detailed logging will be written to files. This can help with troubleshooting.', 'ology-brewing'); ?>
+                            <?php _e('When enabled, detailed logging will be written to files. This can help with troubleshooting.', 'ontap'); ?>
                         </p>
                     </fieldset>
                 </td>
             </tr>
             
             <tr>
-                <th scope="row"><?php _e('Debug Level', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Debug Level', 'ontap'); ?></th>
                 <td>
                     <select name="debug_level">
-                        <option value="minimal" <?php selected($settings['debug_level'], 'minimal'); ?>><?php _e('Minimal - Only errors and important events', 'ology-brewing'); ?></option>
-                        <option value="normal" <?php selected($settings['debug_level'], 'normal'); ?>><?php _e('Normal - Standard debugging information', 'ology-brewing'); ?></option>
-                        <option value="verbose" <?php selected($settings['debug_level'], 'verbose'); ?>><?php _e('Verbose - All operations and detailed information', 'ology-brewing'); ?></option>
+                        <option value="minimal" <?php selected($settings['debug_level'], 'minimal'); ?>><?php _e('Minimal - Only errors and important events', 'ontap'); ?></option>
+                        <option value="normal" <?php selected($settings['debug_level'], 'normal'); ?>><?php _e('Normal - Standard debugging information', 'ontap'); ?></option>
+                        <option value="verbose" <?php selected($settings['debug_level'], 'verbose'); ?>><?php _e('Verbose - All operations and detailed information', 'ontap'); ?></option>
                     </select>
                 </td>
             </tr>
             
             <tr>
-                <th scope="row"><?php _e('Log Retention', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Log Retention', 'ontap'); ?></th>
                 <td>
                     <input type="number" name="debug_retention" value="<?php echo esc_attr($settings['debug_retention']); ?>" min="10" max="1000" class="small-text">
                     <p class="description">
-                        <?php _e('Maximum number of log entries to keep in memory (10-1000).', 'ology-brewing'); ?>
+                        <?php _e('Maximum number of log entries to keep in memory (10-1000).', 'ontap'); ?>
                     </p>
                 </td>
             </tr>
         </table>
         
-        <h2><?php _e('API Settings', 'ology-brewing'); ?></h2>
+        <h2><?php _e('API Settings', 'ontap'); ?></h2>
         
         <table class="form-table">
             <tr>
-                <th scope="row"><?php _e('Untappd Client ID', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Untappd Client ID', 'ontap'); ?></th>
                 <td>
                     <input type="text" name="untappd_client_id" value="<?php echo esc_attr($settings['untappd_client_id']); ?>" class="regular-text">
                     <p class="description">
-                        <?php _e('Your Untappd API client ID.', 'ology-brewing'); ?>
+                        <?php _e('Your Untappd API client ID.', 'ontap'); ?>
                     </p>
                 </td>
             </tr>
             
             <tr>
-                <th scope="row"><?php _e('Untappd Client Secret', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Untappd Client Secret', 'ontap'); ?></th>
                 <td>
                     <input type="password" name="untappd_client_secret" value="<?php echo esc_attr($settings['untappd_client_secret']); ?>" class="regular-text">
                     <p class="description">
-                        <?php _e('Your Untappd API client secret.', 'ology-brewing'); ?>
+                        <?php _e('Your Untappd API client secret.', 'ontap'); ?>
                     </p>
                 </td>
             </tr>
             
             <tr>
-                <th scope="row"><?php _e('Dropbox Access Token', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Dropbox Access Token', 'ontap'); ?></th>
                 <td>
                     <input type="password" name="dropbox_access_token" value="<?php echo esc_attr($settings['dropbox_access_token']); ?>" class="regular-text">
                     <p class="description">
-                        <?php _e('Your Dropbox API access token.', 'ology-brewing'); ?>
+                        <?php _e('Your Dropbox API access token.', 'ontap'); ?>
                     </p>
                 </td>
             </tr>
         </table>
         
-        <h2><?php _e('Sync Settings', 'ology-brewing'); ?></h2>
+        <h2><?php _e('Sync Settings', 'ontap'); ?></h2>
         
         <table class="form-table">
             <tr>
-                <th scope="row"><?php _e('Enable Sync', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Enable Sync', 'ontap'); ?></th>
                 <td>
                     <label>
                         <input type="checkbox" name="sync_enabled" value="1" <?php checked($settings['sync_enabled'], true); ?>>
-                        <?php _e('Enable automatic syncing', 'ology-brewing'); ?>
+                        <?php _e('Enable automatic syncing', 'ontap'); ?>
                     </label>
                 </td>
             </tr>
             
             <tr>
-                <th scope="row"><?php _e('Sync Frequency', 'ology-brewing'); ?></th>
+                <th scope="row"><?php _e('Sync Frequency', 'ontap'); ?></th>
                 <td>
                     <select name="sync_frequency">
-                        <option value="hourly" <?php selected($settings['sync_frequency'], 'hourly'); ?>><?php _e('Hourly', 'ology-brewing'); ?></option>
-                        <option value="twicedaily" <?php selected($settings['sync_frequency'], 'twicedaily'); ?>><?php _e('Twice Daily', 'ology-brewing'); ?></option>
-                        <option value="daily" <?php selected($settings['sync_frequency'], 'daily'); ?>><?php _e('Daily', 'ology-brewing'); ?></option>
+                        <option value="hourly" <?php selected($settings['sync_frequency'], 'hourly'); ?>><?php _e('Hourly', 'ontap'); ?></option>
+                        <option value="twicedaily" <?php selected($settings['sync_frequency'], 'twicedaily'); ?>><?php _e('Twice Daily', 'ontap'); ?></option>
+                        <option value="daily" <?php selected($settings['sync_frequency'], 'daily'); ?>><?php _e('Daily', 'ontap'); ?></option>
                     </select>
                 </td>
             </tr>
         </table>
         
         <p class="submit">
-            <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Save Settings', 'ology-brewing'); ?>">
+            <input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e('Save Settings', 'ontap'); ?>">
         </p>
     </form>
 </div>
 
 <script>
 jQuery(document).ready(function($) {
-    $('#ology-brewing-settings-form').on('submit', function(e) {
+    $('#ontap-settings-form').on('submit', function(e) {
         e.preventDefault();
         
         var formData = $(this).serialize();
@@ -124,7 +124,7 @@ jQuery(document).ready(function($) {
             url: ologyBrewing.ajaxUrl,
             type: 'POST',
             data: {
-                action: 'ology_brewing_save_settings',
+                action: 'ontap_save_settings',
                 nonce: ologyBrewing.nonce,
                 ...formData
             },

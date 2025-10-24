@@ -1,12 +1,12 @@
 {
-  "name": "ology-brewing/ology-brewing",
+  "name": "ontap/ontap",
   "description": "Modern brewery management system with Untappd and Dropbox integration",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
   "authors": [
     {
-      "name": "Ology Brewing",
-      "email": "dev@ologybrewing.com"
+      "name": "OnTap",
+      "email": "dev@ontapbrewing.com"
     }
   ],
   "require": {
@@ -25,7 +25,7 @@
   },
   "autoload-dev": {
     "psr-4": {
-      "OlogyBrewing\\Tests\\": "tests/"
+      "OnTap\\Tests\\": "tests/"
     }
   },
   "scripts": {

@@ -1,4 +1,4 @@
-# Ology Brewing - Phase 1 Handoff Summary
+# OnTap - Phase 1 Handoff Summary
 
 ## 🎯 Current Status
 
@@ -10,7 +10,7 @@
 
 ### 1. Plugin Foundation
 
-- ✅ **Main Plugin File**: `ology-brewing.php` with proper WordPress headers
+- ✅ **Main Plugin File**: `ontap.php` with proper WordPress headers
 - ✅ **Autoloader**: PSR-4 autoloading for clean class management
 - ✅ **Core Plugin Class**: Activation/deactivation hooks, component initialization
 - ✅ **Database Schema**: Tables for beers, locations, and sync logs
@@ -42,11 +42,11 @@
 ## 📁 File Structure Created
 
 ```
-ology-brewing/
-├── ology-brewing.php              # ✅ Main plugin file
+ontap/
+├── ontap.php              # ✅ Main plugin file
 ├── includes/                       # ✅ Core classes
 │   ├── class-autoloader.php       # ✅ PSR-4 autoloader
-│   ├── class-ology-brewing.php    # ✅ Main plugin class
+│   ├── class-ontap.php    # ✅ Main plugin class
 │   ├── class-logger.php           # ✅ File-based logging
 │   ├── class-cache-manager.php    # ✅ Transient caching
 │   ├── class-admin-interface.php  # ✅ Admin interface
@@ -73,7 +73,7 @@ ology-brewing/
 
 ```bash
 # Upload to WordPress
-wp plugin install ology-brewing --activate
+wp plugin install ontap --activate
 
 # Or manually upload to /wp-content/plugins/
 ```
@@ -81,7 +81,7 @@ wp plugin install ology-brewing --activate
 ### 2. Verify Admin Interface
 
 1. **Go to WordPress Admin**
-2. **Look for "Ology Brewing" menu** (beer icon)
+2. **Look for "OnTap" menu** (beer icon)
 3. **Test Dashboard**: Should show sync status
 4. **Test Settings**: Should save API credentials
 5. **Test Logs**: Should show recent activity
@@ -90,7 +90,7 @@ wp plugin install ology-brewing --activate
 
 ```php
 // Add this to functions.php or run in WordPress
-$logger = new OlogyBrewing\Logger();
+$logger = new OnTap\Logger();
 $logger->info('Test message');
 $logger->error('Test error');
 $logger->debug('Test debug');
@@ -100,7 +100,7 @@ $logger->debug('Test debug');
 
 ```bash
 # Check if logs are created
-ls -la /wp-content/logs/ology-brewing/
+ls -la /wp-content/logs/ontap/
 # Should see: error.log, info.log, debug.log
 ```
 
@@ -180,7 +180,7 @@ CREATE TABLE wp_ology_sync_logs (...);
 
 ```php
 // Use the new logger system
-$logger = new OlogyBrewing\Logger();
+$logger = new OnTap\Logger();
 $logger->info('API call successful');
 $logger->error('API call failed: ' . $error_message);
 ```
@@ -189,7 +189,7 @@ $logger->error('API call failed: ' . $error_message);
 
 ### 1. **Enable Debug Logging**
 
-- Go to **Ology Brewing → Settings**
+- Go to **OnTap → Settings**
 - Check **Enable debug logging**
 - Select **Verbose** level
 
@@ -197,8 +197,8 @@ $logger->error('API call failed: ' . $error_message);
 
 ```bash
 # View recent logs
-tail -f /wp-content/logs/ology-brewing/info.log
-tail -f /wp-content/logs/ology-brewing/error.log
+tail -f /wp-content/logs/ontap/info.log
+tail -f /wp-content/logs/ontap/error.log
 ```
 
 ### 3. **Admin Interface**

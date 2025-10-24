@@ -5,27 +5,27 @@ if (!defined('ABSPATH')) {
 ?>
 
 <div class="wrap">
-    <h1><?php _e('Ology Brewing Sync Logs', 'ology-brewing'); ?></h1>
+    <h1><?php _e('OnTap Sync Logs', 'ontap'); ?></h1>
     
-    <div class="ology-brewing-logs-header">
+    <div class="ontap-logs-header">
         <button type="button" class="button" id="refresh-logs">
-            <?php _e('Refresh', 'ology-brewing'); ?>
+            <?php _e('Refresh', 'ontap'); ?>
         </button>
         <button type="button" class="button" id="clear-logs">
-            <?php _e('Clear Logs', 'ology-brewing'); ?>
+            <?php _e('Clear Logs', 'ontap'); ?>
         </button>
     </div>
     
-    <div class="ology-brewing-logs-container">
+    <div class="ontap-logs-container">
         <?php if (!empty($recent_logs)): ?>
-            <div class="ology-brewing-logs">
+            <div class="ontap-logs">
                 <?php foreach ($recent_logs as $log): ?>
-                    <div class="ology-brewing-log-entry ology-brewing-log-<?php echo esc_attr($log['level']); ?>">
-                        <span class="ology-brewing-log-time"><?php echo esc_html($log['timestamp']); ?></span>
-                        <span class="ology-brewing-log-level">[<?php echo esc_html($log['level']); ?>]</span>
-                        <span class="ology-brewing-log-message"><?php echo esc_html($log['message']); ?></span>
+                    <div class="ontap-log-entry ontap-log-<?php echo esc_attr($log['level']); ?>">
+                        <span class="ontap-log-time"><?php echo esc_html($log['timestamp']); ?></span>
+                        <span class="ontap-log-level">[<?php echo esc_html($log['level']); ?>]</span>
+                        <span class="ontap-log-message"><?php echo esc_html($log['message']); ?></span>
                         <?php if (!empty($log['context'])): ?>
-                            <div class="ology-brewing-log-context">
+                            <div class="ontap-log-context">
                                 <pre><?php echo esc_html(json_encode($log['context'], JSON_PRETTY_PRINT)); ?></pre>
                             </div>
                         <?php endif; ?>
@@ -33,21 +33,21 @@ if (!defined('ABSPATH')) {
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
-            <p><?php _e('No logs available', 'ology-brewing'); ?></p>
+            <p><?php _e('No logs available', 'ontap'); ?></p>
         <?php endif; ?>
     </div>
 </div>
 
 <style>
-.ology-brewing-logs-header {
+.ontap-logs-header {
     margin-bottom: 20px;
 }
 
-.ology-brewing-logs-header .button {
+.ontap-logs-header .button {
     margin-right: 10px;
 }
 
-.ology-brewing-logs-container {
+.ontap-logs-container {
     background: #fff;
     border: 1px solid #ccd0d4;
     border-radius: 4px;
@@ -55,7 +55,7 @@ if (!defined('ABSPATH')) {
     box-shadow: 0 1px 1px rgba(0,0,0,.04);
 }
 
-.ology-brewing-logs {
+.ontap-logs {
     max-height: 600px;
     overflow-y: auto;
     font-family: monospace;
@@ -63,50 +63,50 @@ if (!defined('ABSPATH')) {
     line-height: 1.4;
 }
 
-.ology-brewing-log-entry {
+.ontap-log-entry {
     margin-bottom: 10px;
     padding: 8px;
     border-left: 3px solid #ddd;
     background: #f9f9f9;
 }
 
-.ology-brewing-log-error {
+.ontap-log-error {
     border-left-color: #d63638;
     background: #fcf0f1;
 }
 
-.ology-brewing-log-warning {
+.ontap-log-warning {
     border-left-color: #dba617;
     background: #fcf9e8;
 }
 
-.ology-brewing-log-info {
+.ontap-log-info {
     border-left-color: #00a32a;
     background: #f0f8f0;
 }
 
-.ology-brewing-log-debug {
+.ontap-log-debug {
     border-left-color: #72aee6;
     background: #f0f6fc;
 }
 
-.ology-brewing-log-time {
+.ontap-log-time {
     color: #666;
     margin-right: 10px;
     font-weight: bold;
 }
 
-.ology-brewing-log-level {
+.ontap-log-level {
     font-weight: bold;
     margin-right: 10px;
     text-transform: uppercase;
 }
 
-.ology-brewing-log-message {
+.ontap-log-message {
     color: #333;
 }
 
-.ology-brewing-log-context {
+.ontap-log-context {
     margin-top: 5px;
     padding: 5px;
     background: #fff;
@@ -114,7 +114,7 @@ if (!defined('ABSPATH')) {
     border-radius: 3px;
 }
 
-.ology-brewing-log-context pre {
+.ontap-log-context pre {
     margin: 0;
     font-size: 11px;
     color: #666;
@@ -133,7 +133,7 @@ jQuery(document).ready(function($) {
                 url: ologyBrewing.ajaxUrl,
                 type: 'POST',
                 data: {
-                    action: 'ology_brewing_clear_logs',
+                    action: 'ontap_clear_logs',
                     nonce: ologyBrewing.nonce
                 },
                 success: function(response) {

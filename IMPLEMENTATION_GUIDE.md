@@ -1,4 +1,4 @@
-# Ology Brewing - Implementation Guide
+# OnTap - Implementation Guide
 
 ## 🎯 Current Status
 
@@ -10,19 +10,19 @@
 
 ### Step 1: Create Main Plugin File
 
-**File**: `ology-brewing.php`  
+**File**: `ontap.php`  
 **Purpose**: WordPress plugin entry point
 
 ```php
 <?php
 /**
- * Plugin Name: Ology Brewing
- * Plugin URI: https://ologybrewing.com
+ * Plugin Name: OnTap
+ * Plugin URI: https://ontapbrewing.com
  * Description: Modern brewery management system with Untappd and Dropbox integration
  * Version: 1.0.0
- * Author: Ology Brewing
+ * Author: OnTap
  * License: GPL v2 or later
- * Text Domain: ology-brewing
+ * Text Domain: ontap
  * Domain Path: /languages
  */
 
@@ -32,18 +32,18 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('OLOGY_BREWING_VERSION', '1.0.0');
-define('OLOGY_BREWING_PLUGIN_FILE', __FILE__);
-define('OLOGY_BREWING_PLUGIN_DIR', plugin_dir_path(__FILE__));
-define('OLOGY_BREWING_PLUGIN_URL', plugin_dir_url(__FILE__));
-define('OLOGY_BREWING_PLUGIN_BASENAME', plugin_basename(__FILE__));
+define('ONTAP_VERSION', '1.0.0');
+define('ONTAP_PLUGIN_FILE', __FILE__);
+define('ONTAP_PLUGIN_DIR', plugin_dir_path(__FILE__));
+define('ONTAP_PLUGIN_URL', plugin_dir_url(__FILE__));
+define('ONTAP_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 // Autoloader
-require_once OLOGY_BREWING_PLUGIN_DIR . 'includes/class-autoloader.php';
+require_once ONTAP_PLUGIN_DIR . 'includes/class-autoloader.php';
 
 // Initialize plugin
 add_action('plugins_loaded', function() {
-    OlogyBrewing\OlogyBrewing::get_instance();
+    OnTap\OlogyBrewing::get_instance();
 });
 ```
 
@@ -57,11 +57,11 @@ add_action('plugins_loaded', function() {
 namespace OlogyBrewing;
 
 class Autoloader {
-    private $prefix = 'OlogyBrewing\\';
+    private $prefix = 'OnTap\\';
     private $base_dir;
 
     public function __construct() {
-        $this->base_dir = OLOGY_BREWING_PLUGIN_DIR . 'includes/';
+        $this->base_dir = ONTAP_PLUGIN_DIR . 'includes/';
         spl_autoload_register([$this, 'load_class']);
     }
 
@@ -84,7 +84,7 @@ new Autoloader();
 
 ### Step 3: Create Main Plugin Class
 
-**File**: `includes/class-ology-brewing.php`  
+**File**: `includes/class-ontap.php`  
 **Purpose**: Core plugin functionality
 
 ```php
@@ -110,8 +110,8 @@ class OlogyBrewing {
     }
 
     private function init_hooks() {
-        register_activation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'activate']);
-        register_deactivation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'deactivate']);
+        register_activation_hook(ONTAP_PLUGIN_FILE, [$this, 'activate']);
+        register_deactivation_hook(ONTAP_PLUGIN_FILE, [$this, 'deactivate']);
 
         add_action('init', [$this, 'init']);
         add_action('admin_init', [$this, 'admin_init']);
@@ -135,7 +135,7 @@ class OlogyBrewing {
     }
 
     public function init() {
-        load_plugin_textdomain('ology-brewing', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain('ontap', false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
 
     public function admin_init() {
@@ -162,7 +162,7 @@ class Logger {
     private $log_levels = ['error', 'warning', 'info', 'debug'];
 
     public function __construct() {
-        $this->log_dir = WP_CONTENT_DIR . '/logs/ology-brewing/';
+        $this->log_dir = WP_CONTENT_DIR . '/logs/ontap/';
         $this->ensure_log_directory();
     }
 
@@ -211,7 +211,7 @@ class Logger {
     }
 
     private function write_to_transient($message, $level, $context) {
-        $recent_logs = get_transient('ology_brewing_recent_logs') ?: [];
+        $recent_logs = get_transient('ontap_recent_logs') ?: [];
         $recent_logs[] = [
             'timestamp' => current_time('Y-m-d H:i:s'),
             'level' => $level,
@@ -224,7 +224,7 @@ class Logger {
             $recent_logs = array_slice($recent_logs, -50);
         }
 
-        set_transient('ology_brewing_recent_logs', $recent_logs, HOUR_IN_SECONDS);
+        set_transient('ontap_recent_logs', $recent_logs, HOUR_IN_SECONDS);
     }
 
     private function ensure_log_directory() {
@@ -245,7 +245,7 @@ class Logger {
 namespace OlogyBrewing;
 
 class CacheManager {
-    private $cache_prefix = 'ology_brewing_';
+    private $cache_prefix = 'ontap_';
     private $default_expiry = 3600; // 1 hour
 
     public function get($key, $default = false) {
@@ -289,72 +289,72 @@ class AdminInterface {
 
     public function init() {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
-        add_action('wp_ajax_ology_brewing_sync', [$this, 'handle_ajax_sync']);
-        add_action('wp_ajax_ology_brewing_clear_logs', [$this, 'handle_ajax_clear_logs']);
+        add_action('wp_ajax_ontap_sync', [$this, 'handle_ajax_sync']);
+        add_action('wp_ajax_ontap_clear_logs', [$this, 'handle_ajax_clear_logs']);
     }
 
     public function add_menu_pages() {
         add_menu_page(
-            'Ology Brewing',
-            'Ology Brewing',
+            'OnTap',
+            'OnTap',
             'manage_options',
-            'ology-brewing',
+            'ontap',
             [$this, 'render_dashboard'],
             'dashicons-beer',
             30
         );
 
         add_submenu_page(
-            'ology-brewing',
+            'ontap',
             'Settings',
             'Settings',
             'manage_options',
-            'ology-brewing-settings',
+            'ontap-settings',
             [$this, 'render_settings']
         );
 
         add_submenu_page(
-            'ology-brewing',
+            'ontap',
             'Sync Logs',
             'Sync Logs',
             'manage_options',
-            'ology-brewing-logs',
+            'ontap-logs',
             [$this, 'render_logs']
         );
     }
 
     public function enqueue_scripts($hook) {
-        if (strpos($hook, 'ology-brewing') === false) {
+        if (strpos($hook, 'ontap') === false) {
             return;
         }
 
-        wp_enqueue_script('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], OLOGY_BREWING_VERSION, true);
-        wp_enqueue_style('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/css/admin.css', [], OLOGY_BREWING_VERSION);
+        wp_enqueue_script('ontap-admin', ONTAP_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], ONTAP_VERSION, true);
+        wp_enqueue_style('ontap-admin', ONTAP_PLUGIN_URL . 'assets/css/admin.css', [], ONTAP_VERSION);
     }
 
     public function render_dashboard() {
-        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/dashboard.php';
+        include ONTAP_PLUGIN_DIR . 'admin/views/dashboard.php';
     }
 
     public function render_settings() {
-        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/settings.php';
+        include ONTAP_PLUGIN_DIR . 'admin/views/settings.php';
     }
 
     public function render_logs() {
-        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/logs.php';
+        include ONTAP_PLUGIN_DIR . 'admin/views/logs.php';
     }
 
     public function handle_ajax_sync() {
-        check_ajax_referer('ology_brewing_sync', 'nonce');
+        check_ajax_referer('ontap_sync', 'nonce');
 
         // TODO: Implement sync logic
         wp_send_json_success(['message' => 'Sync started']);
     }
 
     public function handle_ajax_clear_logs() {
-        check_ajax_referer('ology_brewing_clear_logs', 'nonce');
+        check_ajax_referer('ontap_clear_logs', 'nonce');
 
-        delete_transient('ology_brewing_recent_logs');
+        delete_transient('ontap_recent_logs');
         wp_send_json_success(['message' => 'Logs cleared']);
     }
 }
@@ -435,10 +435,10 @@ class Database {
 
 ```php
 <?php
-namespace OlogyBrewing\Tests\Unit;
+namespace OnTap\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use OlogyBrewing\Logger;
+use OnTap\Logger;
 
 class LoggerTest extends TestCase {
     private $logger;
@@ -450,7 +450,7 @@ class LoggerTest extends TestCase {
     public function test_log_writes_to_file() {
         $this->logger->info('Test message');
 
-        $log_file = WP_CONTENT_DIR . '/logs/ology-brewing/info.log';
+        $log_file = WP_CONTENT_DIR . '/logs/ontap/info.log';
         $this->assertFileExists($log_file);
 
         $content = file_get_contents($log_file);
@@ -460,7 +460,7 @@ class LoggerTest extends TestCase {
     public function test_log_writes_to_transient() {
         $this->logger->info('Test message');
 
-        $recent_logs = get_transient('ology_brewing_recent_logs');
+        $recent_logs = get_transient('ontap_recent_logs');
         $this->assertIsArray($recent_logs);
         $this->assertCount(1, $recent_logs);
         $this->assertEquals('Test message', $recent_logs[0]['message']);
@@ -518,8 +518,8 @@ sudo mv wp-cli.phar /usr/local/bin/wp
 
 ```bash
 # Clone repository
-git clone <repository-url> ology-brewing
-cd ology-brewing
+git clone <repository-url> ontap
+cd ontap
 
 # Install dependencies
 composer install

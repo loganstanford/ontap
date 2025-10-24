@@ -1,5 +1,5 @@
 /**
- * Ology Brewing Admin JavaScript
+ * OnTap Admin JavaScript
  */
 
 (function ($) {
@@ -18,23 +18,23 @@
       $("#clear-logs").on("click", this.handleClearLogs);
 
       // Settings form
-      $("#ology-brewing-settings-form").on("submit", this.handleSaveSettings);
+      $("#ontap-settings-form").on("submit", this.handleSaveSettings);
     },
 
     handleSync: function (e) {
       e.preventDefault();
 
       var $button = $(this);
-      var $container = $button.closest(".ology-brewing-card");
+      var $container = $button.closest(".ontap-card");
 
       $button.prop("disabled", true).text("Starting...");
-      $container.addClass("ology-brewing-loading");
+      $container.addClass("ontap-loading");
 
       $.ajax({
         url: ologyBrewing.ajaxUrl,
         type: "POST",
         data: {
-          action: "ology_brewing_sync",
+          action: "ontap_sync",
           nonce: ologyBrewing.nonce,
         },
         success: function (response) {
@@ -59,7 +59,7 @@
         },
         complete: function () {
           $button.prop("disabled", false).text("Start Manual Sync");
-          $container.removeClass("ology-brewing-loading");
+          $container.removeClass("ontap-loading");
         },
       });
     },
@@ -78,7 +78,7 @@
         url: ologyBrewing.ajaxUrl,
         type: "POST",
         data: {
-          action: "ology_brewing_clear_logs",
+          action: "ontap_clear_logs",
           nonce: ologyBrewing.nonce,
         },
         success: function (response) {
@@ -119,7 +119,7 @@
         url: ologyBrewing.ajaxUrl,
         type: "POST",
         data: {
-          action: "ology_brewing_save_settings",
+          action: "ontap_save_settings",
           nonce: ologyBrewing.nonce,
           ...$form.serialize(),
         },
@@ -149,11 +149,11 @@
       type = type || "info";
 
       var $notice = $(
-        '<div class="ology-brewing-notice ' + type + '">' + message + "</div>"
+        '<div class="ontap-notice ' + type + '">' + message + "</div>"
       );
 
       // Remove existing notices
-      $(".ology-brewing-notice").remove();
+      $(".ontap-notice").remove();
 
       // Add new notice
       $(".wrap h1").after($notice);

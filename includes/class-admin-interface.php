@@ -10,58 +10,58 @@ class AdminInterface {
     
     public function init() {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_scripts']);
-        add_action('wp_ajax_ology_brewing_sync', [$this, 'handle_ajax_sync']);
-        add_action('wp_ajax_ology_brewing_clear_logs', [$this, 'handle_ajax_clear_logs']);
-        add_action('wp_ajax_ology_brewing_save_settings', [$this, 'handle_ajax_save_settings']);
+        add_action('wp_ajax_ontap_sync', [$this, 'handle_ajax_sync']);
+        add_action('wp_ajax_ontap_clear_logs', [$this, 'handle_ajax_clear_logs']);
+        add_action('wp_ajax_ontap_save_settings', [$this, 'handle_ajax_save_settings']);
     }
     
     public function add_menu_pages() {
         add_menu_page(
-            'Ology Brewing',
-            'Ology Brewing',
+            'OnTap',
+            'OnTap',
             'manage_options',
-            'ology-brewing',
+            'ontap',
             [$this, 'render_dashboard'],
             'dashicons-beer',
             30
         );
         
         add_submenu_page(
-            'ology-brewing',
+            'ontap',
             'Settings',
             'Settings',
             'manage_options',
-            'ology-brewing-settings',
+            'ontap-settings',
             [$this, 'render_settings']
         );
         
         add_submenu_page(
-            'ology-brewing',
+            'ontap',
             'Sync Logs',
             'Sync Logs',
             'manage_options',
-            'ology-brewing-logs',
+            'ontap-logs',
             [$this, 'render_logs']
         );
     }
     
     public function enqueue_scripts($hook) {
-        if (strpos($hook, 'ology-brewing') === false) {
+        if (strpos($hook, 'ontap') === false) {
             return;
         }
         
-        wp_enqueue_script('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], OLOGY_BREWING_VERSION, true);
-        wp_enqueue_style('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/css/admin.css', [], OLOGY_BREWING_VERSION);
+        wp_enqueue_script('ontap-admin', ONTAP_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], ONTAP_VERSION, true);
+        wp_enqueue_style('ontap-admin', ONTAP_PLUGIN_URL . 'assets/css/admin.css', [], ONTAP_VERSION);
         
-        wp_localize_script('ology-brewing-admin', 'ologyBrewing', [
+        wp_localize_script('ontap-admin', 'ologyBrewing', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
-            'nonce' => wp_create_nonce('ology_brewing_nonce'),
+            'nonce' => wp_create_nonce('ontap_nonce'),
             'strings' => [
-                'syncStarted' => __('Sync started', 'ology-brewing'),
-                'syncCompleted' => __('Sync completed', 'ology-brewing'),
-                'syncFailed' => __('Sync failed', 'ology-brewing'),
-                'logsCleared' => __('Logs cleared', 'ology-brewing'),
-                'settingsSaved' => __('Settings saved', 'ology-brewing')
+                'syncStarted' => __('Sync started', 'ontap'),
+                'syncCompleted' => __('Sync completed', 'ontap'),
+                'syncFailed' => __('Sync failed', 'ontap'),
+                'logsCleared' => __('Logs cleared', 'ontap'),
+                'settingsSaved' => __('Settings saved', 'ontap')
             ]
         ]);
     }
@@ -71,50 +71,50 @@ class AdminInterface {
         $sync_enabled = get_option('ology_sync_enabled', false);
         $last_sync = get_option('ology_last_sync', 'Never');
         
-        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/dashboard.php';
+        include ONTAP_PLUGIN_DIR . 'admin/views/dashboard.php';
     }
     
     public function render_settings() {
         $settings = $this->get_settings();
-        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/settings.php';
+        include ONTAP_PLUGIN_DIR . 'admin/views/settings.php';
     }
     
     public function render_logs() {
         $recent_logs = $this->logger->get_recent_logs(100);
-        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/logs.php';
+        include ONTAP_PLUGIN_DIR . 'admin/views/logs.php';
     }
     
     public function handle_ajax_sync() {
-        check_ajax_referer('ology_brewing_nonce', 'nonce');
+        check_ajax_referer('ontap_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => __('Insufficient permissions', 'ology-brewing')]);
+            wp_send_json_error(['message' => __('Insufficient permissions', 'ontap')]);
         }
         
         // TODO: Implement actual sync logic
         $this->logger->info('Manual sync started by user: ' . get_current_user_id());
         
-        wp_send_json_success(['message' => __('Sync started', 'ology-brewing')]);
+        wp_send_json_success(['message' => __('Sync started', 'ontap')]);
     }
     
     public function handle_ajax_clear_logs() {
-        check_ajax_referer('ology_brewing_nonce', 'nonce');
+        check_ajax_referer('ontap_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => __('Insufficient permissions', 'ology-brewing')]);
+            wp_send_json_error(['message' => __('Insufficient permissions', 'ontap')]);
         }
         
         $this->logger->clear_logs();
         $this->logger->info('Logs cleared by user: ' . get_current_user_id());
         
-        wp_send_json_success(['message' => __('Logs cleared', 'ology-brewing')]);
+        wp_send_json_success(['message' => __('Logs cleared', 'ontap')]);
     }
     
     public function handle_ajax_save_settings() {
-        check_ajax_referer('ology_brewing_nonce', 'nonce');
+        check_ajax_referer('ontap_nonce', 'nonce');
         
         if (!current_user_can('manage_options')) {
-            wp_send_json_error(['message' => __('Insufficient permissions', 'ology-brewing')]);
+            wp_send_json_error(['message' => __('Insufficient permissions', 'ontap')]);
         }
         
         $settings = [
@@ -134,7 +134,7 @@ class AdminInterface {
         
         $this->logger->info('Settings updated by user: ' . get_current_user_id());
         
-        wp_send_json_success(['message' => __('Settings saved', 'ology-brewing')]);
+        wp_send_json_success(['message' => __('Settings saved', 'ontap')]);
     }
     
     private function get_settings() {

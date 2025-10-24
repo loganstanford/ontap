@@ -1,4 +1,4 @@
-# Ology Brewing WordPress Plugin
+# OnTap WordPress Plugin
 
 A modern, scalable WordPress plugin for brewery management with Untappd and Dropbox integration.
 
@@ -25,8 +25,8 @@ A modern, scalable WordPress plugin for brewery management with Untappd and Drop
 1. **Clone the repository**:
 
    ```bash
-   git clone <repository-url> ology-brewing
-   cd ology-brewing
+   git clone <repository-url> ontap
+   cd ontap
    ```
 
 2. **Install dependencies**:
@@ -36,12 +36,12 @@ A modern, scalable WordPress plugin for brewery management with Untappd and Drop
    ```
 
 3. **Activate the plugin**:
-   - Upload to `/wp-content/plugins/ology-brewing/`
+   - Upload to `/wp-content/plugins/ontap/`
    - Activate through WordPress admin
 
 ### Configuration
 
-1. **Go to Ology Brewing → Settings**
+1. **Go to OnTap → Settings**
 2. **Enter your API credentials**:
    - Untappd Client ID
    - Untappd Client Secret
@@ -52,10 +52,10 @@ A modern, scalable WordPress plugin for brewery management with Untappd and Drop
 ## 📁 Project Structure
 
 ```
-ology-brewing/
-├── ology-brewing.php              # Main plugin file
+ontap/
+├── ontap.php              # Main plugin file
 ├── includes/                       # Core classes
-│   ├── class-ology-brewing.php    # Main plugin class
+│   ├── class-ontap.php    # Main plugin class
 │   ├── class-logger.php           # Logging system
 │   ├── class-cache-manager.php    # Caching layer
 │   ├── class-admin-interface.php  # Admin interface
@@ -85,7 +85,7 @@ composer watch
 ### Code Standards
 
 - **PSR-4 Autoloading**: Follow WordPress coding standards
-- **Namespacing**: Use `OlogyBrewing\` namespace
+- **Namespacing**: Use `OnTap\` namespace
 - **Documentation**: PHPDoc for all classes and methods
 - **Testing**: Unit tests for all business logic
 
@@ -142,7 +142,7 @@ composer test:all
 ### Logger Class
 
 ```php
-$logger = new OlogyBrewing\Logger();
+$logger = new OnTap\Logger();
 
 $logger->info('Information message');
 $logger->warning('Warning message');
@@ -153,7 +153,7 @@ $logger->debug('Debug message');
 ### Cache Manager
 
 ```php
-$cache = new OlogyBrewing\CacheManager();
+$cache = new OnTap\CacheManager();
 
 $cache->set('key', $value, 3600); // 1 hour
 $value = $cache->get('key', $default);
@@ -164,24 +164,24 @@ $cache->delete('key');
 
 ```php
 // Create tables
-OlogyBrewing\Database::create_tables();
+OnTap\Database::create_tables();
 
 // Drop tables
-OlogyBrewing\Database::drop_tables();
+OnTap\Database::drop_tables();
 ```
 
 ## 🔍 Debugging
 
 ### Enable Debug Logging
 
-1. Go to **Ology Brewing → Settings**
+1. Go to **OnTap → Settings**
 2. Check **Enable debug logging**
 3. Select debug level (minimal, normal, verbose)
-4. View logs in **Ology Brewing → Sync Logs**
+4. View logs in **OnTap → Sync Logs**
 
 ### Log Files
 
-- **Location**: `/wp-content/logs/ology-brewing/`
+- **Location**: `/wp-content/logs/ontap/`
 - **Files**: `error.log`, `warning.log`, `info.log`, `debug.log`
 - **Rotation**: Automatic when files exceed 10MB
 

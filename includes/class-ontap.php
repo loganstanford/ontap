@@ -1,7 +1,7 @@
 <?php
-namespace OlogyBrewing;
+namespace OnTap;
 
-class OlogyBrewing {
+class OnTap {
     private static $instance = null;
     private $logger;
     private $cache_manager;
@@ -20,8 +20,8 @@ class OlogyBrewing {
     }
     
     private function init_hooks() {
-        register_activation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'activate']);
-        register_deactivation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'deactivate']);
+        register_activation_hook(ONTAP_PLUGIN_FILE, [$this, 'activate']);
+        register_deactivation_hook(ONTAP_PLUGIN_FILE, [$this, 'deactivate']);
         
         add_action('init', [$this, 'init']);
         add_action('admin_init', [$this, 'admin_init']);
@@ -39,16 +39,16 @@ class OlogyBrewing {
         $this->set_default_options();
         $this->schedule_cron_jobs();
         
-        $this->logger->info('Ology Brewing plugin activated');
+        $this->logger->info('OnTap plugin activated');
     }
     
     public function deactivate() {
         $this->clear_scheduled_hooks();
-        $this->logger->info('Ology Brewing plugin deactivated');
+        $this->logger->info('OnTap plugin deactivated');
     }
     
     public function init() {
-        load_plugin_textdomain('ology-brewing', false, dirname(plugin_basename(__FILE__)) . '/languages');
+        load_plugin_textdomain('ontap', false, dirname(plugin_basename(__FILE__)) . '/languages');
     }
     
     public function admin_init() {
@@ -65,14 +65,14 @@ class OlogyBrewing {
     
     private function set_default_options() {
         $default_options = [
-            'ology_debug_enabled' => false,
-            'ology_debug_level' => 'normal',
-            'ology_debug_retention' => 100,
-            'ology_untappd_client_id' => '',
-            'ology_untappd_client_secret' => '',
-            'ology_dropbox_access_token' => '',
-            'ology_sync_frequency' => 'hourly',
-            'ology_sync_enabled' => false
+            'ontap_debug_enabled' => false,
+            'ontap_debug_level' => 'normal',
+            'ontap_debug_retention' => 100,
+            'ontap_untappd_client_id' => '',
+            'ontap_untappd_client_secret' => '',
+            'ontap_dropbox_access_token' => '',
+            'ontap_sync_frequency' => 'hourly',
+            'ontap_sync_enabled' => false
         ];
         
         foreach ($default_options as $option => $value) {
@@ -83,17 +83,17 @@ class OlogyBrewing {
     }
     
     private function schedule_cron_jobs() {
-        if (!wp_next_scheduled('ology_brewing_sync_cron')) {
-            wp_schedule_event(time(), 'hourly', 'ology_brewing_sync_cron');
+        if (!wp_next_scheduled('ontap_sync_cron')) {
+            wp_schedule_event(time(), 'hourly', 'ontap_sync_cron');
         }
         
-        if (!wp_next_scheduled('ology_brewing_cleanup_cron')) {
-            wp_schedule_event(time(), 'daily', 'ology_brewing_cleanup_cron');
+        if (!wp_next_scheduled('ontap_cleanup_cron')) {
+            wp_schedule_event(time(), 'daily', 'ontap_cleanup_cron');
         }
     }
     
     private function clear_scheduled_hooks() {
-        wp_clear_scheduled_hook('ology_brewing_sync_cron');
-        wp_clear_scheduled_hook('ology_brewing_cleanup_cron');
+        wp_clear_scheduled_hook('ontap_sync_cron');
+        wp_clear_scheduled_hook('ontap_cleanup_cron');
     }
 }
