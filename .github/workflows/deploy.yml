@@ -26,13 +26,6 @@ jobs:
           source: "./*"
           target: "/home/ologybrewing/website-dev/wp-content/plugins/ology-brewing"
 
-      - name: Set Permissions (Development)
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SFTP_SERVER }}
-          username: ${{ secrets.SFTP_USERNAME }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-
   deploy-to-production:
     runs-on: ubuntu-latest
     environment: production
@@ -50,10 +43,3 @@ jobs:
           password: ${{ secrets.SFTP_PASSWORD }}
           source: "./*"
           target: "/home/ologybrewing/website/wp-content/plugins/ology-brewing"
-
-      - name: Set Permissions (Production)
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.SFTP_SERVER }}
-          username: ${{ secrets.SFTP_USERNAME }}
-          password: ${{ secrets.SFTP_PASSWORD }}
