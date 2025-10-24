@@ -1,5 +1,5 @@
 <?php
-namespace OlogyBrewing;
+namespace OnTap;
 
 class AdminInterface {
     private $logger;

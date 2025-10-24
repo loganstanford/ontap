@@ -1,5 +1,5 @@
 <?php
-namespace OlogyBrewing;
+namespace OnTap;
 
 class CacheManager {
     private $cache_prefix = 'ontap_';

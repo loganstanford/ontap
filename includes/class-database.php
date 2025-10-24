@@ -1,5 +1,5 @@
 <?php
-namespace OlogyBrewing;
+namespace OnTap;
 
 class Database {
     public static function create_tables() {

@@ -1,6 +1,10 @@
-# OnTap WordPress Plugin
+# OnTap - Brewery Management
 
-A modern, scalable WordPress plugin for brewery management with Untappd and Dropbox integration.
+A modern, scalable WordPress plugin for brewery management with Untappd and Dropbox integration. Perfect for breweries, taprooms, and beer businesses looking to streamline their operations.
+
+[![WordPress](https://img.shields.io/badge/WordPress-5.0%2B-blue.svg)](https://wordpress.org/)
+[![PHP](https://img.shields.io/badge/PHP-7.4%2B-purple.svg)](https://php.net/)
+[![License](https://img.shields.io/badge/License-GPL%20v2%2B-green.svg)](https://www.gnu.org/licenses/gpl-2.0.html)
 
 ## 🎯 Features
 
@@ -25,7 +29,7 @@ A modern, scalable WordPress plugin for brewery management with Untappd and Drop
 1. **Clone the repository**:
 
    ```bash
-   git clone <repository-url> ontap
+   git clone https://github.com/loganstanford/ontap.git
    cd ontap
    ```
 
@@ -275,4 +279,6 @@ GPL v2 or later
 
 **Version**: 1.0.0  
 **Last Updated**: 2024-10-23  
-**Status**: Development Phase 1 Complete
+**Status**: Ready for Commercial Release  
+**Author**: OnScript Tech, LLC  
+**Website**: [ontapbrewing.com](https://ontapbrewing.com)

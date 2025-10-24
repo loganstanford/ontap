@@ -1,5 +1,5 @@
 <?php
-namespace OlogyBrewing;
+namespace OnTap;
 
 class Logger {
     private $log_dir;

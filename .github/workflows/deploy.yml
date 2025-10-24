@@ -1,4 +1,4 @@
-name: Deploy Ology Brewing Plugin
+name: Deploy OnTap Plugin
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
           source: "./*"
-          target: "/home/ologybrewing/website-dev/wp-content/plugins/ology-brewing"
+          target: "/home/ologybrewing/website-dev/wp-content/plugins/ontap"
 
   deploy-to-production:
     runs-on: ubuntu-latest
@@ -42,4 +42,4 @@ jobs:
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
           source: "./*"
-          target: "/home/ologybrewing/website/wp-content/plugins/ology-brewing"
+          target: "/home/ologybrewing/website/wp-content/plugins/ontap"
