@@ -1,7 +1,7 @@
 <?php
 namespace OlogyBrewing;
 
-class Autoloader {
+class OlogyBrewingAutoloader {
     private $prefix = 'OlogyBrewing\\';
     private $base_dir;
     
@@ -24,4 +24,4 @@ class Autoloader {
     }
 }
 
-new Autoloader();
+new OlogyBrewingAutoloader();

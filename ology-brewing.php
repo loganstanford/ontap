@@ -2,9 +2,9 @@
 /**
  * Plugin Name: Ology Brewing
  * Plugin URI: https://ologybrewing.com
- * Description: Modern brewery management system with Untappd and Dropbox integration
+ * Description: Brewery management system with Untappd and Dropbox integration
  * Version: 1.0.0
- * Author: Ology Brewing
+ * Author: OnScript Tech, LLC
  * License: GPL v2 or later
  * Text Domain: ology-brewing
  * Domain Path: /languages
@@ -26,7 +26,7 @@ define('OLOGY_BREWING_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('OLOGY_BREWING_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 // Autoloader
-require_once OLGY_BREWING_PLUGIN_DIR . 'includes/class-autoloader.php';
+require_once OLGY_BREWING_PLUGIN_DIR . 'includes/autoloader.php';
 
 // Initialize plugin
 add_action('plugins_loaded', function() {
