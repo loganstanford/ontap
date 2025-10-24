@@ -50,8 +50,8 @@ class AdminInterface {
             return;
         }
         
-        wp_enqueue_script('ology-brewing-admin', OLGY_BREWING_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], OLGY_BREWING_VERSION, true);
-        wp_enqueue_style('ology-brewing-admin', OLGY_BREWING_PLUGIN_URL . 'assets/css/admin.css', [], OLGY_BREWING_VERSION);
+        wp_enqueue_script('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], OLOGY_BREWING_VERSION, true);
+        wp_enqueue_style('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/css/admin.css', [], OLOGY_BREWING_VERSION);
         
         wp_localize_script('ology-brewing-admin', 'ologyBrewing', [
             'ajaxUrl' => admin_url('admin-ajax.php'),
@@ -71,17 +71,17 @@ class AdminInterface {
         $sync_enabled = get_option('ology_sync_enabled', false);
         $last_sync = get_option('ology_last_sync', 'Never');
         
-        include OLGY_BREWING_PLUGIN_DIR . 'admin/views/dashboard.php';
+        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/dashboard.php';
     }
     
     public function render_settings() {
         $settings = $this->get_settings();
-        include OLGY_BREWING_PLUGIN_DIR . 'admin/views/settings.php';
+        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/settings.php';
     }
     
     public function render_logs() {
         $recent_logs = $this->logger->get_recent_logs(100);
-        include OLGY_BREWING_PLUGIN_DIR . 'admin/views/logs.php';
+        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/logs.php';
     }
     
     public function handle_ajax_sync() {

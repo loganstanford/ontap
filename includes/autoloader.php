@@ -24,7 +24,7 @@ function ology_brewing_autoload($class_name) {
     $relative_class = substr($class_name, strlen('OlogyBrewing\\'));
     
     // Convert namespace separators to directory separators
-    $file = OLGY_BREWING_PLUGIN_DIR . 'includes/' . str_replace('\\', '/', $relative_class) . '.php';
+    $file = OLOGY_BREWING_PLUGIN_DIR . 'includes/' . str_replace('\\', '/', $relative_class) . '.php';
     
     // Load the file if it exists
     if (file_exists($file)) {

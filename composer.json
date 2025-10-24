@@ -18,11 +18,11 @@
     "phpstan/phpstan": "^1.0",
     "squizlabs/php_codesniffer": "^3.6"
   },
-    "autoload": {
-        "files": [
-            "includes/autoloader.php"
-        ]
-    },
+  "autoload": {
+    "files": [
+      "includes/autoloader.php"
+    ]
+  },
   "autoload-dev": {
     "psr-4": {
       "OlogyBrewing\\Tests\\": "tests/"

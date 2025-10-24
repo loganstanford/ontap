@@ -26,7 +26,7 @@ define('OLOGY_BREWING_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('OLOGY_BREWING_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 // Autoloader
-require_once OLGY_BREWING_PLUGIN_DIR . 'includes/autoloader.php';
+require_once OLOGY_BREWING_PLUGIN_DIR . 'includes/autoloader.php';
 
 // Initialize plugin
 add_action('plugins_loaded', function() {

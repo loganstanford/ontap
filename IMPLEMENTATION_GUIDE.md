@@ -39,7 +39,7 @@ define('OLOGY_BREWING_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('OLOGY_BREWING_PLUGIN_BASENAME', plugin_basename(__FILE__));
 
 // Autoloader
-require_once OLGY_BREWING_PLUGIN_DIR . 'includes/class-autoloader.php';
+require_once OLOGY_BREWING_PLUGIN_DIR . 'includes/class-autoloader.php';
 
 // Initialize plugin
 add_action('plugins_loaded', function() {
@@ -61,7 +61,7 @@ class Autoloader {
     private $base_dir;
 
     public function __construct() {
-        $this->base_dir = OLGY_BREWING_PLUGIN_DIR . 'includes/';
+        $this->base_dir = OLOGY_BREWING_PLUGIN_DIR . 'includes/';
         spl_autoload_register([$this, 'load_class']);
     }
 
@@ -110,8 +110,8 @@ class OlogyBrewing {
     }
 
     private function init_hooks() {
-        register_activation_hook(OLGY_BREWING_PLUGIN_FILE, [$this, 'activate']);
-        register_deactivation_hook(OLGY_BREWING_PLUGIN_FILE, [$this, 'deactivate']);
+        register_activation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'activate']);
+        register_deactivation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'deactivate']);
 
         add_action('init', [$this, 'init']);
         add_action('admin_init', [$this, 'admin_init']);
@@ -328,20 +328,20 @@ class AdminInterface {
             return;
         }
 
-        wp_enqueue_script('ology-brewing-admin', OLGY_BREWING_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], OLGY_BREWING_VERSION, true);
-        wp_enqueue_style('ology-brewing-admin', OLGY_BREWING_PLUGIN_URL . 'assets/css/admin.css', [], OLGY_BREWING_VERSION);
+        wp_enqueue_script('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/js/admin.js', ['jquery'], OLOGY_BREWING_VERSION, true);
+        wp_enqueue_style('ology-brewing-admin', OLOGY_BREWING_PLUGIN_URL . 'assets/css/admin.css', [], OLOGY_BREWING_VERSION);
     }
 
     public function render_dashboard() {
-        include OLGY_BREWING_PLUGIN_DIR . 'admin/views/dashboard.php';
+        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/dashboard.php';
     }
 
     public function render_settings() {
-        include OLGY_BREWING_PLUGIN_DIR . 'admin/views/settings.php';
+        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/settings.php';
     }
 
     public function render_logs() {
-        include OLGY_BREWING_PLUGIN_DIR . 'admin/views/logs.php';
+        include OLOGY_BREWING_PLUGIN_DIR . 'admin/views/logs.php';
     }
 
     public function handle_ajax_sync() {

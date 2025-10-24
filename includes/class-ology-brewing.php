@@ -20,8 +20,8 @@ class OlogyBrewing {
     }
     
     private function init_hooks() {
-        register_activation_hook(OLGY_BREWING_PLUGIN_FILE, [$this, 'activate']);
-        register_deactivation_hook(OLGY_BREWING_PLUGIN_FILE, [$this, 'deactivate']);
+        register_activation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'activate']);
+        register_deactivation_hook(OLOGY_BREWING_PLUGIN_FILE, [$this, 'deactivate']);
         
         add_action('init', [$this, 'init']);
         add_action('admin_init', [$this, 'admin_init']);
