@@ -13,6 +13,7 @@
      */
     $(document).ready(function() {
         initManualSync();
+        initDebugLogs();
     });
 
     /**
@@ -64,6 +65,73 @@
                     $result
                         .addClass('error')
                         .html(ontapAdmin.strings.syncError);
+                }
+            });
+        });
+    }
+
+    /**
+     * Handle debug log buttons
+     */
+    function initDebugLogs() {
+        // Refresh logs button
+        $('#ontap-refresh-logs').on('click', function(e) {
+            e.preventDefault();
+
+            var $button = $(this);
+            var $logsContainer = $('#ontap-debug-logs');
+
+            $button.prop('disabled', true).text('Loading...');
+
+            $.ajax({
+                url: ontapAdmin.ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'ontap_get_debug_logs',
+                    nonce: ontapAdmin.nonce
+                },
+                success: function(response) {
+                    $button.prop('disabled', false).text('Refresh Logs');
+                    if (response.success) {
+                        $logsContainer.html(response.data.html);
+                    }
+                },
+                error: function() {
+                    $button.prop('disabled', false).text('Refresh Logs');
+                    alert('Failed to refresh logs');
+                }
+            });
+        });
+
+        // Clear logs button
+        $('#ontap-clear-logs').on('click', function(e) {
+            e.preventDefault();
+
+            if (!confirm('Are you sure you want to clear all debug logs? This cannot be undone.')) {
+                return;
+            }
+
+            var $button = $(this);
+            var $logsContainer = $('#ontap-debug-logs');
+
+            $button.prop('disabled', true);
+
+            $.ajax({
+                url: ontapAdmin.ajaxUrl,
+                type: 'POST',
+                data: {
+                    action: 'ontap_clear_debug_logs',
+                    nonce: ontapAdmin.nonce
+                },
+                success: function(response) {
+                    $button.prop('disabled', false);
+                    if (response.success) {
+                        $logsContainer.html('<p class="description">No debug logs available.</p>');
+                    }
+                },
+                error: function() {
+                    $button.prop('disabled', false);
+                    alert('Failed to clear logs');
                 }
             });
         });

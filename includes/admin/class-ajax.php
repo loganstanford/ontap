@@ -10,6 +10,7 @@ namespace OnTap\Admin;
 
 use OnTap\API\Untappd_Client;
 use OnTap\API\Sync_Manager;
+use OnTap\Debug_Logger;
 
 /**
  * Ajax class
@@ -22,6 +23,8 @@ class Ajax {
 	public function __construct() {
 		add_action( 'wp_ajax_ontap_manual_sync', array( $this, 'handle_manual_sync' ) );
 		add_action( 'wp_ajax_ontap_test_connection', array( $this, 'handle_test_connection' ) );
+		add_action( 'wp_ajax_ontap_get_debug_logs', array( $this, 'handle_get_debug_logs' ) );
+		add_action( 'wp_ajax_ontap_clear_debug_logs', array( $this, 'handle_clear_debug_logs' ) );
 	}
 
 	/**
@@ -80,6 +83,48 @@ class Ajax {
 
 		wp_send_json_success(
 			array( 'message' => __( 'Connection successful!', 'ontap' ) )
+		);
+	}
+
+	/**
+	 * Handle get debug logs AJAX request
+	 *
+	 * @return void
+	 */
+	public function handle_get_debug_logs() {
+		check_ajax_referer( 'ontap_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_ontap_settings' ) ) {
+			wp_send_json_error(
+				array( 'message' => __( 'You do not have permission to view debug logs.', 'ontap' ) )
+			);
+		}
+
+		$html = Debug_Logger::get_formatted_logs( 100 );
+
+		wp_send_json_success(
+			array( 'html' => $html )
+		);
+	}
+
+	/**
+	 * Handle clear debug logs AJAX request
+	 *
+	 * @return void
+	 */
+	public function handle_clear_debug_logs() {
+		check_ajax_referer( 'ontap_admin_nonce', 'nonce' );
+
+		if ( ! current_user_can( 'manage_ontap_settings' ) ) {
+			wp_send_json_error(
+				array( 'message' => __( 'You do not have permission to clear debug logs.', 'ontap' ) )
+			);
+		}
+
+		Debug_Logger::clear_logs();
+
+		wp_send_json_success(
+			array( 'message' => __( 'Debug logs cleared successfully.', 'ontap' ) )
 		);
 	}
 }

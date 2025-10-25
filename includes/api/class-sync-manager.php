@@ -10,6 +10,7 @@ namespace OnTap\API;
 
 use OnTap\Taplist;
 use OnTap\Container;
+use OnTap\Debug_Logger;
 
 /**
  * Sync Manager class
@@ -65,6 +66,8 @@ class Sync_Manager {
 	public function sync_all() {
 		$this->reset_results();
 
+		Debug_Logger::log( 'Starting sync of all taprooms', 'info' );
+
 		// Get all taproom terms
 		$taprooms = get_terms(
 			array(
@@ -99,6 +102,18 @@ class Sync_Manager {
 
 		$this->results['success'] = empty( $this->results['errors'] );
 		$this->results['message']  = $this->get_summary_message();
+
+		Debug_Logger::log(
+			'Sync completed',
+			$this->results['success'] ? 'info' : 'error',
+			array(
+				'beers_created'      => $this->results['beers_created'],
+				'beers_updated'      => $this->results['beers_updated'],
+				'taplist_synced'     => $this->results['taplist_synced'],
+				'containers_synced'  => $this->results['containers_synced'],
+				'errors'             => $this->results['errors'],
+			)
+		);
 
 		return $this->results;
 	}
@@ -159,6 +174,18 @@ class Sync_Manager {
 	 * @return int|WP_Error Beer post ID on success, error on failure
 	 */
 	private function sync_beer( $item, $taproom_id ) {
+		Debug_Logger::log(
+			sprintf( 'Syncing beer: %s (Untappd ID: %s)', $item['name'], $item['untappd_id'] ),
+			'info',
+			array(
+				'beer_name'    => $item['name'],
+				'untappd_id'   => $item['untappd_id'],
+				'style_field'  => isset( $item['style'] ) ? $item['style'] : 'NOT SET',
+				'brewery'      => isset( $item['brewery'] ) ? $item['brewery'] : 'NOT SET',
+				'abv'          => isset( $item['abv'] ) ? $item['abv'] : 'NOT SET',
+			)
+		);
+
 		// Check if beer already exists by Untappd ID
 		$existing = $this->get_beer_by_untappd_id( $item['untappd_id'] );
 
@@ -276,14 +303,39 @@ class Sync_Manager {
 	 */
 	private function assign_beer_style( $beer_id, $style ) {
 		if ( empty( $style ) ) {
+			Debug_Logger::log(
+				sprintf( 'Empty style for beer ID %d', $beer_id ),
+				'warning'
+			);
 			return;
 		}
+
+		Debug_Logger::log(
+			sprintf( 'Assigning style to beer ID %d', $beer_id ),
+			'info',
+			array(
+				'beer_id'      => $beer_id,
+				'style_value'  => $style,
+				'style_type'   => gettype( $style ),
+			)
+		);
 
 		// Split style by hyphen to get parent and child
 		$parts = array_map( 'trim', explode( ' - ', $style, 2 ) );
 
 		$parent_name = $parts[0];
 		$child_name  = isset( $parts[1] ) ? $parts[1] : null;
+
+		Debug_Logger::log(
+			sprintf( 'Parsed style into parent/child for beer ID %d', $beer_id ),
+			'info',
+			array(
+				'beer_id'     => $beer_id,
+				'original'    => $style,
+				'parent_name' => $parent_name,
+				'child_name'  => $child_name,
+			)
+		);
 
 		// Get or create parent term
 		$parent_term = term_exists( $parent_name, 'ontap_style' );

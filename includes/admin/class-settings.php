@@ -252,6 +252,25 @@ class Settings {
 			</button>
 			<span class="spinner" id="ontap-sync-spinner"></span>
 			<div id="ontap-sync-result"></div>
+
+			<hr>
+
+			<h2><?php esc_html_e( 'Debug Logs', 'ontap' ); ?></h2>
+			<p><?php esc_html_e( 'View detailed sync logs for troubleshooting. These logs show exactly what data is being processed during sync operations.', 'ontap' ); ?></p>
+			<p>
+				<button type="button" class="button" id="ontap-refresh-logs">
+					<?php esc_html_e( 'Refresh Logs', 'ontap' ); ?>
+				</button>
+				<button type="button" class="button" id="ontap-clear-logs">
+					<?php esc_html_e( 'Clear All Logs', 'ontap' ); ?>
+				</button>
+			</p>
+			<div id="ontap-debug-logs">
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo \OnTap\Debug_Logger::get_formatted_logs( 100 );
+				?>
+			</div>
 		</div>
 		<?php
 	}
