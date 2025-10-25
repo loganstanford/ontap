@@ -2,7 +2,7 @@ name: Deploy OnTap Plugin
 
 on:
   push:
-    branches: [main, develop, feature/*, hotfix/*]
+    branches: [main, develop, feature/*, hotfix/*, claude/*]
   pull_request:
     types: [closed]
     branches: [main]
@@ -10,26 +10,6 @@ on:
 jobs:
   deploy-to-development:
     runs-on: ubuntu-latest
-    environment: development
-    # Deploy to development for all pushes except main
-    if: github.ref != 'refs/heads/main'
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Deploy to SFTP (Development)
-        uses: appleboy/scp-action@master
-        with:
-          host: ${{ secrets.SFTP_SERVER }}
-          username: ${{ secrets.SFTP_USERNAME }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          source: "./*"
-          target: "/home/ologybrewing/website-dev/wp-content/plugins/ontap"
-
-  deploy-to-production:
-    runs-on: ubuntu-latest
-    # Only deploy to production when PRs are merged into main
-    if: github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.ref == 'refs/heads/main'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -41,4 +21,4 @@ jobs:
           username: ${{ secrets.SFTP_USERNAME }}
           password: ${{ secrets.SFTP_PASSWORD }}
           source: "./*"
-          target: "/home/ologybrewing/website/wp-content/plugins/ontap"
+          target: "/home/onscripttech-ontap/htdocs/ontap.onscripttech.com/wp-content/plugins/ontap"
