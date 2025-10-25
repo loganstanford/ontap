@@ -1,0 +1,39 @@
+# WordPress
+.htaccess
+wp-config.php
+wp-content/uploads/
+wp-content/blogs.dir/
+wp-content/upgrade/
+wp-content/backup-db/
+wp-content/advanced-cache.php
+wp-content/wp-cache-config.php
+*.log
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Composer
+/vendor/
+composer.lock
+
+# NPM
+node_modules/
+package-lock.json
+
+# Build
+/build/
+/dist/
+
+# Testing
+.phpunit.result.cache
+tests/_output/*
+tests/_support/_generated
+
+# Environment
+.env
+.env.local

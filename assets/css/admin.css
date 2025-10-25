@@ -1,0 +1,97 @@
+/**
+ * OnTap Admin Styles
+ *
+ * @package OnTap
+ * @since   1.0.0
+ */
+
+/* Settings Page Styles */
+.wrap .ontap-settings-header {
+    margin-bottom: 20px;
+}
+
+.ontap-settings-header h1 {
+    margin-bottom: 10px;
+}
+
+/* Manual Sync Button */
+#ontap-manual-sync {
+    margin-top: 10px;
+}
+
+#ontap-sync-spinner {
+    float: none;
+    margin: 0 10px;
+    visibility: hidden;
+}
+
+#ontap-sync-spinner.is-active {
+    visibility: visible;
+}
+
+#ontap-sync-result {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 3px;
+}
+
+#ontap-sync-result.success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+#ontap-sync-result.error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+/* Beer Edit Screen */
+.ontap-meta-box {
+    padding: 12px;
+}
+
+.ontap-meta-field {
+    margin-bottom: 15px;
+}
+
+.ontap-meta-field label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.ontap-meta-field input[type="text"],
+.ontap-meta-field input[type="number"],
+.ontap-meta-field select,
+.ontap-meta-field textarea {
+    width: 100%;
+    max-width: 400px;
+}
+
+.ontap-meta-field .description {
+    color: #666;
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 5px;
+}
+
+/* Taproom columns in beer list */
+.column-ontap_taproom {
+    width: 15%;
+}
+
+.column-ontap_style {
+    width: 15%;
+}
+
+/* Admin notices */
+.notice.ontap-notice {
+    position: relative;
+    padding: 12px;
+}
+
+.ontap-notice .dashicons {
+    margin-right: 5px;
+}

@@ -1,0 +1,185 @@
+/**
+ * OnTap Public Styles
+ *
+ * @package OnTap
+ * @since   1.0.0
+ */
+
+/* Container */
+.ontap-taplist {
+    margin: 20px 0;
+}
+
+/* Grid Layout */
+.ontap-taplist.layout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+/* List Layout */
+.ontap-taplist.layout-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Card Layout */
+.ontap-taplist.layout-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+/* Beer Item */
+.ontap-beer-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ontap-beer-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Beer Image */
+.ontap-beer-image {
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+.ontap-beer-image img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+}
+
+/* Beer Title */
+.ontap-beer-title {
+    font-size: 1.25em;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+}
+
+/* Beer Meta */
+.ontap-beer-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 10px 0;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.ontap-beer-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ontap-beer-meta-label {
+    font-weight: 600;
+}
+
+/* Beer Style */
+.ontap-beer-style {
+    display: inline-block;
+    background: #f0f0f0;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    margin: 5px 0;
+}
+
+/* Beer Description */
+.ontap-beer-description {
+    margin: 10px 0;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Availability Badge */
+.ontap-availability {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-top: 10px;
+}
+
+.ontap-availability.available {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.ontap-availability.unavailable {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+/* Tap Number */
+.ontap-tap-number {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #333;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+.ontap-beer-item {
+    position: relative;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .ontap-taplist.layout-grid,
+    .ontap-taplist.layout-card {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Loading State */
+.ontap-loading {
+    text-align: center;
+    padding: 40px;
+    font-size: 1.1em;
+    color: #666;
+}
+
+.ontap-loading:before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #333;
+    border-radius: 50%;
+    animation: ontap-spin 1s linear infinite;
+    margin-right: 10px;
+}
+
+@keyframes ontap-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Empty State */
+.ontap-empty {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-size: 1.1em;
+}
