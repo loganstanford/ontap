@@ -13,6 +13,14 @@
     });
 
     function initTaplistManager() {
+        // Sort by dropdown
+        $('#sort-by').on('change', function() {
+            var sortBy = $(this).val();
+            var url = new URL(window.location.href);
+            url.searchParams.set('sort_by', sortBy);
+            window.location.href = url.toString();
+        });
+
         // Initialize sortable for drag-and-drop reordering
         $('#the-list').sortable({
             handle: '.handle',

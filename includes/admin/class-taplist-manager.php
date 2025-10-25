@@ -99,7 +99,7 @@ class Taplist_Manager {
 				</select>
 			</div>
 
-			<!-- Bulk Actions -->
+			<!-- Bulk Actions and Sorting -->
 			<div class="tablenav top">
 				<div class="alignleft actions bulkactions">
 					<select id="bulk-action-selector-top">
@@ -111,6 +111,37 @@ class Taplist_Manager {
 					<button type="button" id="doaction" class="button action">
 						<?php esc_html_e( 'Apply', 'ontap' ); ?>
 					</button>
+				</div>
+				<div class="alignleft actions" style="margin-left: 10px;">
+					<label for="sort-by" style="margin-right: 5px;">
+						<?php esc_html_e( 'Sort by:', 'ontap' ); ?>
+					</label>
+					<select id="sort-by" name="sort_by">
+						<option value="tap_number" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : 'tap_number', 'tap_number' ); ?>>
+							<?php esc_html_e( 'Tap Number', 'ontap' ); ?>
+						</option>
+						<option value="name" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : '', 'name' ); ?>>
+							<?php esc_html_e( 'Beer Name (A-Z)', 'ontap' ); ?>
+						</option>
+						<option value="name_desc" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : '', 'name_desc' ); ?>>
+							<?php esc_html_e( 'Beer Name (Z-A)', 'ontap' ); ?>
+						</option>
+						<option value="style" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : '', 'style' ); ?>>
+							<?php esc_html_e( 'Style', 'ontap' ); ?>
+						</option>
+						<option value="abv_asc" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : '', 'abv_asc' ); ?>>
+							<?php esc_html_e( 'ABV (Low to High)', 'ontap' ); ?>
+						</option>
+						<option value="abv_desc" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : '', 'abv_desc' ); ?>>
+							<?php esc_html_e( 'ABV (High to Low)', 'ontap' ); ?>
+						</option>
+						<option value="date_added" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : '', 'date_added' ); ?>>
+							<?php esc_html_e( 'Date Added (Newest)', 'ontap' ); ?>
+						</option>
+						<option value="date_added_asc" <?php selected( isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : '', 'date_added_asc' ); ?>>
+							<?php esc_html_e( 'Date Added (Oldest)', 'ontap' ); ?>
+						</option>
+					</select>
 				</div>
 				<div class="alignright actions">
 					<button type="button" id="save-tap-order" class="button button-primary">
@@ -304,18 +335,101 @@ class Taplist_Manager {
 	private function get_taplist_items( $taproom_id ) {
 		global $wpdb;
 
-		$table = $wpdb->prefix . 'ontap_taplist';
+		$table      = $wpdb->prefix . 'ontap_taplist';
+		$posts_table = $wpdb->posts;
+		$postmeta_table = $wpdb->postmeta;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		// Get sort parameter
+		$sort_by = isset( $_GET['sort_by'] ) ? sanitize_text_field( $_GET['sort_by'] ) : 'tap_number';
+
+		// Build ORDER BY clause based on sort option
+		$order_by = 'tap_number ASC, date_added DESC';
+
+		switch ( $sort_by ) {
+			case 'name':
+				$order_by = 'post_title ASC';
+				break;
+
+			case 'name_desc':
+				$order_by = 'post_title DESC';
+				break;
+
+			case 'style':
+				// For style sorting, we'll need to get the term name
+				// This will be handled in PHP after the query
+				$order_by = 'date_added DESC';
+				break;
+
+			case 'abv_asc':
+				$order_by = 'CAST(abv_value AS DECIMAL(5,2)) ASC';
+				break;
+
+			case 'abv_desc':
+				$order_by = 'CAST(abv_value AS DECIMAL(5,2)) DESC';
+				break;
+
+			case 'date_added':
+				$order_by = 't.date_added DESC';
+				break;
+
+			case 'date_added_asc':
+				$order_by = 't.date_added ASC';
+				break;
+
+			case 'tap_number':
+			default:
+				$order_by = 't.tap_number ASC, t.date_added DESC';
+				break;
+		}
+
+		// Build query with joins for sorting by beer properties
+		$query = "
+			SELECT t.*, p.post_title, pm_abv.meta_value as abv_value
+			FROM {$table} t
+			LEFT JOIN {$posts_table} p ON t.beer_id = p.ID
+			LEFT JOIN {$postmeta_table} pm_abv ON t.beer_id = pm_abv.post_id AND pm_abv.meta_key = 'abv'
+			WHERE t.taproom_id = %d
+			ORDER BY {$order_by}
+		";
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$items = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT * FROM {$table}
-				WHERE taproom_id = %d
-				ORDER BY tap_number ASC, date_added DESC",
-				$taproom_id
-			)
+			$wpdb->prepare( $query, $taproom_id )
 		);
 
+		// Handle style sorting in PHP (more complex due to taxonomy relationship)
+		if ( 'style' === $sort_by && ! empty( $items ) ) {
+			usort( $items, function( $a, $b ) {
+				$style_a = $this->get_beer_style_name( $a->beer_id );
+				$style_b = $this->get_beer_style_name( $b->beer_id );
+				return strcmp( $style_a, $style_b );
+			} );
+		}
+
 		return $items ?: array();
+	}
+
+	/**
+	 * Get beer style name for sorting
+	 *
+	 * @param int $beer_id Beer post ID.
+	 * @return string Style name
+	 */
+	private function get_beer_style_name( $beer_id ) {
+		$styles = wp_get_post_terms( $beer_id, 'ontap_style' );
+
+		if ( empty( $styles ) || is_wp_error( $styles ) ) {
+			return '';
+		}
+
+		// Get parent term name
+		foreach ( $styles as $term ) {
+			if ( 0 === $term->parent ) {
+				return $term->name;
+			}
+		}
+
+		// Fallback to first term
+		return $styles[0]->name;
 	}
 }
