@@ -46,9 +46,6 @@ class Admin {
 	 * @return void
 	 */
 	public function enqueue_scripts( $hook ) {
-		// Debug: Log the hook to identify the correct page
-		error_log( 'OnTap Admin Hook: ' . $hook );
-
 		// Only load on OnTap admin pages and beer edit screens
 		if ( $this->is_ontap_admin_page( $hook ) ) {
 			wp_enqueue_script(
@@ -75,10 +72,7 @@ class Admin {
 			wp_localize_script( 'ontap-admin', 'ontapAdmin', $localized_data );
 
 			// Enqueue taplist manager script on the manage taplist page
-			// Hook could be: ontap_page_ontap-manage-taplist OR ontap-settings_page_ontap-manage-taplist
 			if ( 'ontap_page_ontap-manage-taplist' === $hook || 'ontap-settings_page_ontap-manage-taplist' === $hook ) {
-				error_log( 'OnTap: Enqueuing taplist manager script on hook: ' . $hook );
-
 				wp_enqueue_script( 'jquery-ui-sortable' );
 				wp_enqueue_script(
 					'ontap-taplist-manager',
