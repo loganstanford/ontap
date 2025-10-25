@@ -33,44 +33,29 @@ class Settings {
 	 * @return void
 	 */
 	public function add_menu_pages() {
-		// Main settings page
+		// Main OnTap menu - Beers post type will be added here automatically
 		add_menu_page(
-			__( 'OnTap Settings', 'ontap' ),
 			__( 'OnTap', 'ontap' ),
-			'manage_ontap_settings',
+			__( 'OnTap', 'ontap' ),
+			'edit_posts',
 			'ontap-settings',
 			array( $this, 'render_settings_page' ),
 			'dashicons-beer',
 			58
 		);
 
-		// Settings submenu (same as main page)
+		// Settings submenu - rename the first submenu item to "Settings"
 		add_submenu_page(
 			'ontap-settings',
-			__( 'Settings', 'ontap' ),
+			__( 'OnTap Settings', 'ontap' ),
 			__( 'Settings', 'ontap' ),
 			'manage_ontap_settings',
 			'ontap-settings',
 			array( $this, 'render_settings_page' )
 		);
 
-		// Taproom management submenu
-		add_submenu_page(
-			'ontap-settings',
-			__( 'Taprooms', 'ontap' ),
-			__( 'Taprooms', 'ontap' ),
-			'manage_categories',
-			'edit-tags.php?taxonomy=ontap_taproom&post_type=ontap_beer'
-		);
-
-		// Beer styles submenu
-		add_submenu_page(
-			'ontap-settings',
-			__( 'Beer Styles', 'ontap' ),
-			__( 'Beer Styles', 'ontap' ),
-			'manage_categories',
-			'edit-tags.php?taxonomy=ontap_style&post_type=ontap_beer'
-		);
+		// Note: "All Beers", "Add New", "Taprooms", and "Beer Styles"
+		// are automatically added by the beer post type registration
 	}
 
 	/**

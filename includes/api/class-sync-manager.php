@@ -264,20 +264,65 @@ class Sync_Manager {
 	/**
 	 * Assign beer style taxonomy
 	 *
+	 * Handles Untappd's "Parent - Child" style format by creating hierarchical terms.
+	 * Examples:
+	 * - "IPA - New England / Hazy" → Parent: "IPA", Child: "New England / Hazy"
+	 * - "Stout - Imperial / Double Milk" → Parent: "Stout", Child: "Imperial / Double Milk"
+	 * - "Pilsner - German" → Parent: "Pilsner", Child: "German"
+	 *
 	 * @param int    $beer_id Post ID.
-	 * @param string $style   Beer style name.
+	 * @param string $style   Beer style name from Untappd.
 	 * @return void
 	 */
 	private function assign_beer_style( $beer_id, $style ) {
-		$term = term_exists( $style, 'ontap_style' );
-
-		if ( ! $term ) {
-			$term = wp_insert_term( $style, 'ontap_style' );
+		if ( empty( $style ) ) {
+			return;
 		}
 
-		if ( ! is_wp_error( $term ) ) {
-			wp_set_object_terms( $beer_id, array( $term['term_id'] ), 'ontap_style', false );
+		// Split style by hyphen to get parent and child
+		$parts = array_map( 'trim', explode( ' - ', $style, 2 ) );
+
+		$parent_name = $parts[0];
+		$child_name  = isset( $parts[1] ) ? $parts[1] : null;
+
+		// Get or create parent term
+		$parent_term = term_exists( $parent_name, 'ontap_style' );
+
+		if ( ! $parent_term ) {
+			$parent_term = wp_insert_term(
+				$parent_name,
+				'ontap_style',
+				array( 'parent' => 0 )
+			);
 		}
+
+		if ( is_wp_error( $parent_term ) ) {
+			return;
+		}
+
+		$parent_id = $parent_term['term_id'];
+		$terms_to_assign = array( $parent_id );
+
+		// If there's a child style, create it under the parent
+		if ( $child_name ) {
+			$child_term = term_exists( $child_name, 'ontap_style', $parent_id );
+
+			if ( ! $child_term ) {
+				$child_term = wp_insert_term(
+					$child_name,
+					'ontap_style',
+					array( 'parent' => $parent_id )
+				);
+			}
+
+			if ( ! is_wp_error( $child_term ) ) {
+				// Assign both parent and child
+				$terms_to_assign[] = $child_term['term_id'];
+			}
+		}
+
+		// Assign terms to beer
+		wp_set_object_terms( $beer_id, $terms_to_assign, 'ontap_style', false );
 	}
 
 	/**
