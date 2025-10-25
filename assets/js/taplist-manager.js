@@ -17,19 +17,40 @@
         $('#sort-by').on('change', function() {
             var sortBy = $(this).val();
             var url = new URL(window.location.href);
-            url.searchParams.set('sort_by', sortBy);
-            window.location.href = url.toString();
+
+            // Preserve existing parameters
+            var taproom = url.searchParams.get('taproom');
+
+            // Build new URL
+            var newUrl = url.pathname + '?page=ontap-manage-taplist';
+            if (taproom) {
+                newUrl += '&taproom=' + taproom;
+            }
+            newUrl += '&sort_by=' + sortBy;
+
+            window.location.href = newUrl;
         });
 
-        // Initialize sortable for drag-and-drop reordering
-        $('#the-list').sortable({
-            handle: '.handle',
-            placeholder: 'sortable-placeholder',
-            update: function() {
-                // Enable save button when order changes
-                $('#save-tap-order').prop('disabled', false).addClass('button-primary');
+        // Initialize sortable for drag-and-drop reordering (only when sorting by tap number)
+        var currentSort = $('#sort-by').val();
+        if (currentSort === 'tap_number') {
+            $('#the-list').sortable({
+                handle: '.handle',
+                placeholder: 'sortable-placeholder',
+                update: function() {
+                    // Enable save button when order changes
+                    $('#save-tap-order').prop('disabled', false).addClass('button-primary');
+                }
+            });
+            $('#save-tap-order').show();
+        } else {
+            // Disable drag-drop and hide save button when not sorting by tap number
+            if ($('#the-list').hasClass('ui-sortable')) {
+                $('#the-list').sortable('destroy');
             }
-        });
+            $('#save-tap-order').hide();
+            $('.handle').css('cursor', 'default').attr('title', 'Drag-drop only available when sorting by Tap Number');
+        }
 
         // Select all checkbox
         $('#select-all-beers').on('change', function() {

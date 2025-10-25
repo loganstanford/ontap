@@ -193,6 +193,18 @@ class Taplist_Manager {
 					?>
 					<?php echo esc_html( sprintf( __( '%d beers total, %d available, %d unavailable', 'ontap' ), count( $taplist_items ), $available_count, count( $taplist_items ) - $available_count ) ); ?>
 				</div>
+
+				<?php
+				$current_sort = isset( $_GET['sort_by'] ) ? $_GET['sort_by'] : 'tap_number';
+				if ( 'tap_number' !== $current_sort ) :
+					?>
+					<div class="notice notice-info inline" style="margin-top: 15px;">
+						<p>
+							<strong><?php esc_html_e( 'Note:', 'ontap' ); ?></strong>
+							<?php esc_html_e( 'Drag-and-drop reordering is only available when sorting by "Tap Number". Change the sort option to "Tap Number" to reorder beers manually.', 'ontap' ); ?>
+						</p>
+					</div>
+				<?php endif; ?>
 			<?php endif; ?>
 		</div>
 		<?php
