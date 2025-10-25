@@ -11,7 +11,7 @@
  * Plugin Name:       OnTap - Brewery Taplist
  * Plugin URI:        https://ontapbrewery.com
  * Description:       Integrate with Untappd to display live taproom menus on your brewery website. Automatically sync your taplist and display what's on tap.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            OnTap
@@ -31,7 +31,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Current plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
-define( 'ONTAP_VERSION', '1.0.0' );
+define( 'ONTAP_VERSION', '1.0.1' );
 
 /**
  * Plugin base paths and URLs
