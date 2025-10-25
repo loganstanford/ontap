@@ -179,13 +179,35 @@ class Taplist_Manager {
 		$styles    = wp_get_post_terms( $item->beer_id, 'ontap_style' );
 		$containers = Container::get_containers( $item->id );
 
-		// Build style display
+		// Build style display (parent > child hierarchy)
 		$style_display = '';
 		if ( ! empty( $styles ) && ! is_wp_error( $styles ) ) {
-			$style_names   = array_map( function( $term ) {
-				return $term->name;
-			}, $styles );
-			$style_display = implode( ' > ', $style_names );
+			// Separate parent and child terms
+			$parent_terms = array();
+			$child_terms  = array();
+
+			foreach ( $styles as $term ) {
+				if ( 0 === $term->parent ) {
+					$parent_terms[] = $term;
+				} else {
+					$child_terms[] = $term;
+				}
+			}
+
+			// Build hierarchy: parent > child
+			$style_parts = array();
+
+			// Add parent terms first
+			foreach ( $parent_terms as $parent ) {
+				$style_parts[] = $parent->name;
+			}
+
+			// Add child terms
+			foreach ( $child_terms as $child ) {
+				$style_parts[] = $child->name;
+			}
+
+			$style_display = implode( ' > ', $style_parts );
 		}
 
 		// Build containers display
