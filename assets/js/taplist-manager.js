@@ -5,12 +5,19 @@
  * @since   1.0.0
  */
 
+// Test if file is loading at all
+console.log('TAPLIST MANAGER FILE LOADED!');
+alert('Taplist Manager JavaScript file is loading!');
+
 (function($) {
     'use strict';
+
+    console.log('Taplist Manager: Inside IIFE');
 
     $(document).ready(function() {
         console.log('Taplist Manager: Document ready');
         console.log('Sort dropdown exists:', $('#sort-by').length > 0);
+        console.log('jQuery version:', $.fn.jquery);
         initTaplistManager();
     });
 
