@@ -33,7 +33,7 @@ class Settings {
 	 * @return void
 	 */
 	public function add_menu_pages() {
-		// Main OnTap menu - Beers post type will be added here automatically
+		// Main OnTap menu
 		add_menu_page(
 			__( 'OnTap', 'ontap' ),
 			__( 'OnTap', 'ontap' ),
@@ -44,7 +44,27 @@ class Settings {
 			58
 		);
 
-		// Settings submenu - rename the first submenu item to "Settings"
+		// Note: "All Beers" and "Add New" are automatically added by the beer post type
+
+		// Add Taprooms taxonomy submenu
+		add_submenu_page(
+			'ontap-settings',
+			__( 'Taprooms', 'ontap' ),
+			__( 'Taprooms', 'ontap' ),
+			'manage_categories',
+			'edit-tags.php?taxonomy=ontap_taproom&post_type=ontap_beer'
+		);
+
+		// Add Beer Styles taxonomy submenu
+		add_submenu_page(
+			'ontap-settings',
+			__( 'Beer Styles', 'ontap' ),
+			__( 'Beer Styles', 'ontap' ),
+			'manage_categories',
+			'edit-tags.php?taxonomy=ontap_style&post_type=ontap_beer'
+		);
+
+		// Settings submenu
 		add_submenu_page(
 			'ontap-settings',
 			__( 'OnTap Settings', 'ontap' ),
@@ -53,9 +73,6 @@ class Settings {
 			'ontap-settings',
 			array( $this, 'render_settings_page' )
 		);
-
-		// Note: "All Beers", "Add New", "Taprooms", and "Beer Styles"
-		// are automatically added by the beer post type registration
 	}
 
 	/**
