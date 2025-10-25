@@ -9,12 +9,17 @@
     'use strict';
 
     $(document).ready(function() {
+        console.log('Taplist Manager: Document ready');
+        console.log('Sort dropdown exists:', $('#sort-by').length > 0);
         initTaplistManager();
     });
 
     function initTaplistManager() {
+        console.log('Taplist Manager: Initializing');
+
         // Sort by dropdown
         $('#sort-by').on('change', function() {
+            console.log('Sort dropdown changed to:', $(this).val());
             var sortBy = $(this).val();
             var url = new URL(window.location.href);
 

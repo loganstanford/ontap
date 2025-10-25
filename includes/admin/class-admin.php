@@ -56,33 +56,35 @@ class Admin {
 				true
 			);
 
+			// Localize script data
+			$localized_data = array(
+				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'nonce'   => wp_create_nonce( 'ontap_admin_nonce' ),
+				'strings' => array(
+					'confirmSync'   => __( 'Are you sure you want to sync the taplist? This may take a few moments.', 'ontap' ),
+					'syncSuccess'   => __( 'Taplist synced successfully!', 'ontap' ),
+					'syncError'     => __( 'Error syncing taplist. Please try again.', 'ontap' ),
+					'confirmDelete' => __( 'Are you sure you want to delete this item?', 'ontap' ),
+				),
+			);
+
+			// Add to main admin script
+			wp_localize_script( 'ontap-admin', 'ontapAdmin', $localized_data );
+
 			// Enqueue taplist manager script on the manage taplist page
 			if ( 'ontap_page_ontap-manage-taplist' === $hook ) {
 				wp_enqueue_script( 'jquery-ui-sortable' );
 				wp_enqueue_script(
 					'ontap-taplist-manager',
 					ONTAP_PLUGIN_URL . 'assets/js/taplist-manager.js',
-					array( 'jquery', 'jquery-ui-sortable' ),
+					array( 'jquery', 'jquery-ui-sortable', 'ontap-admin' ),
 					ONTAP_VERSION,
 					true
 				);
-			}
 
-			// Localize script with ajax URL and nonce
-			wp_localize_script(
-				'ontap-admin',
-				'ontapAdmin',
-				array(
-					'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-					'nonce'   => wp_create_nonce( 'ontap_admin_nonce' ),
-					'strings' => array(
-						'confirmSync'   => __( 'Are you sure you want to sync the taplist? This may take a few moments.', 'ontap' ),
-						'syncSuccess'   => __( 'Taplist synced successfully!', 'ontap' ),
-						'syncError'     => __( 'Error syncing taplist. Please try again.', 'ontap' ),
-						'confirmDelete' => __( 'Are you sure you want to delete this item?', 'ontap' ),
-					),
-				)
-			);
+				// Also add to taplist manager script
+				wp_localize_script( 'ontap-taplist-manager', 'ontapAdmin', $localized_data );
+			}
 		}
 	}
 
