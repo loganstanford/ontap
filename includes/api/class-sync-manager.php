@@ -352,7 +352,7 @@ class Sync_Manager {
 			return;
 		}
 
-		$parent_id = $parent_term['term_id'];
+		$parent_id = (int) $parent_term['term_id'];
 		$terms_to_assign = array( $parent_id );
 
 		// If there's a child style, create it under the parent
@@ -369,11 +369,21 @@ class Sync_Manager {
 
 			if ( ! is_wp_error( $child_term ) ) {
 				// Assign both parent and child
-				$terms_to_assign[] = $child_term['term_id'];
+				$terms_to_assign[] = (int) $child_term['term_id'];
 			}
 		}
 
 		// Assign terms to beer
+		Debug_Logger::log(
+			sprintf( 'Assigning term IDs to beer ID %d', $beer_id ),
+			'info',
+			array(
+				'beer_id'         => $beer_id,
+				'terms_to_assign' => $terms_to_assign,
+				'term_types'      => array_map( 'gettype', $terms_to_assign ),
+			)
+		);
+
 		wp_set_object_terms( $beer_id, $terms_to_assign, 'ontap_style', false );
 	}
 
