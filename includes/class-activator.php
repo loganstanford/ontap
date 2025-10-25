@@ -93,8 +93,8 @@ class Activator {
 	 */
 	private static function set_default_options() {
 		$defaults = array(
-			'untappd_client_id'     => '',
-			'untappd_client_secret' => '',
+			'untappd_email'         => '',
+			'untappd_api_token'     => '',
 			'sync_frequency'        => 'hourly',
 			'cache_duration'        => 3600,
 			'display_out_of_stock'  => false,

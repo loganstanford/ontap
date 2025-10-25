@@ -80,6 +80,12 @@ class Plugin {
 		$this->post_types = new Post_Types();
 		$this->admin      = new Admin\Admin();
 		$this->settings   = new Admin\Settings();
+
+		// Admin-only components
+		if ( is_admin() ) {
+			new Admin\Ajax();
+			new Admin\Term_Meta();
+		}
 	}
 
 	/**

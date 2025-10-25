@@ -44,13 +44,27 @@ OnTap automatically syncs your taplist with Untappd and displays what's currentl
 - ✅ Activation/deactivation/uninstall handlers
 - ✅ Basic admin and public assets
 
-### Phase 2: Untappd API Integration (Next)
+### Phase 2: Untappd API Integration ✅ COMPLETE
 
-- API client class
-- Authentication handling
-- Menu data fetching
-- Automated sync scheduling
-- Data mapping and storage
+- ✅ Untappd Business API client with Basic Auth
+- ✅ Authentication via email + API token
+- ✅ Endpoints: locations, menus, menu items
+- ✅ Sync Manager for automated data syncing
+- ✅ Beer creation/updates from Untappd data
+- ✅ Container (serving size/price) syncing
+- ✅ Taproom term meta for menu ID mapping
+- ✅ Manual and automated sync support
+- ✅ Image downloading and attachment
+- ✅ Style taxonomy auto-assignment
+- ✅ AJAX handlers for sync triggers
+- ✅ API response caching with transients
+
+### Phase 3: Admin Management Interface (Next)
+
+- Enhanced taproom management UI
+- Manual overrides for availability
+- Reorder tap positions
+- Sync logs and error reporting
 
 ## Plugin Structure
 

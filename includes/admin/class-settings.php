@@ -94,28 +94,28 @@ class Settings {
 		);
 
 		add_settings_field(
-			'untappd_client_id',
-			__( 'Untappd Client ID', 'ontap' ),
+			'untappd_email',
+			__( 'Untappd Email', 'ontap' ),
 			array( $this, 'render_text_field' ),
 			'ontap-settings',
 			'ontap_api_settings',
 			array(
-				'field_id'    => 'untappd_client_id',
-				'field_type'  => 'text',
-				'description' => __( 'Enter your Untappd API Client ID', 'ontap' ),
+				'field_id'    => 'untappd_email',
+				'field_type'  => 'email',
+				'description' => __( 'Your Untappd Business account email', 'ontap' ),
 			)
 		);
 
 		add_settings_field(
-			'untappd_client_secret',
-			__( 'Untappd Client Secret', 'ontap' ),
+			'untappd_api_token',
+			__( 'API Token', 'ontap' ),
 			array( $this, 'render_text_field' ),
 			'ontap-settings',
 			'ontap_api_settings',
 			array(
-				'field_id'    => 'untappd_client_secret',
+				'field_id'    => 'untappd_api_token',
 				'field_type'  => 'password',
-				'description' => __( 'Enter your Untappd API Client Secret', 'ontap' ),
+				'description' => __( 'Your API token from business.untappd.com/account', 'ontap' ),
 			)
 		);
 
@@ -258,8 +258,9 @@ class Settings {
 	 * Section descriptions
 	 */
 	public function render_api_section_description() {
-		echo '<p>' . esc_html__( 'Configure your Untappd API credentials. You can obtain these from the Untappd API website.', 'ontap' ) . '</p>';
-		echo '<p><a href="https://untappd.com/api/register" target="_blank">' . esc_html__( 'Register for Untappd API Access', 'ontap' ) . '</a></p>';
+		echo '<p>' . esc_html__( 'Configure your Untappd Business API credentials.', 'ontap' ) . '</p>';
+		echo '<p><a href="https://business.untappd.com/account" target="_blank">' . esc_html__( 'Get your API Token from Untappd Business', 'ontap' ) . '</a></p>';
+		echo '<p class="description">' . esc_html__( 'Find your API tokens under "API Access Tokens" in your Untappd Business account settings.', 'ontap' ) . '</p>';
 	}
 
 	public function render_sync_section_description() {
@@ -387,12 +388,12 @@ class Settings {
 	public function sanitize_settings( $input ) {
 		$sanitized = array();
 
-		if ( isset( $input['untappd_client_id'] ) ) {
-			$sanitized['untappd_client_id'] = sanitize_text_field( $input['untappd_client_id'] );
+		if ( isset( $input['untappd_email'] ) ) {
+			$sanitized['untappd_email'] = sanitize_email( $input['untappd_email'] );
 		}
 
-		if ( isset( $input['untappd_client_secret'] ) ) {
-			$sanitized['untappd_client_secret'] = sanitize_text_field( $input['untappd_client_secret'] );
+		if ( isset( $input['untappd_api_token'] ) ) {
+			$sanitized['untappd_api_token'] = sanitize_text_field( $input['untappd_api_token'] );
 		}
 
 		if ( isset( $input['sync_frequency'] ) ) {
