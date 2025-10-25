@@ -63,8 +63,8 @@ foreach ( $taxonomies as $taxonomy ) {
 }
 
 // Delete custom tables
-$table_name = $wpdb->prefix . 'ontap_taplist';
-$wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ontap_containers" );
+$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}ontap_taplist" );
 
 // Delete options
 delete_option( 'ontap_settings' );

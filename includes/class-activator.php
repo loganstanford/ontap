@@ -37,17 +37,17 @@ class Activator {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
-		$table_name      = $wpdb->prefix . 'ontap_taplist';
+
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
 		// Table for tracking which beers are on tap at which locations
-		$sql = "CREATE TABLE $table_name (
+		$taplist_table = $wpdb->prefix . 'ontap_taplist';
+		$sql_taplist = "CREATE TABLE $taplist_table (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
 			beer_id bigint(20) NOT NULL,
 			taproom_id bigint(20) NOT NULL,
 			tap_number int(11) DEFAULT NULL,
 			is_available tinyint(1) DEFAULT 1,
-			pour_size varchar(50) DEFAULT NULL,
-			price decimal(10,2) DEFAULT NULL,
 			untappd_menu_item_id varchar(100) DEFAULT NULL,
 			date_added datetime DEFAULT CURRENT_TIMESTAMP,
 			date_modified datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -58,8 +58,29 @@ class Activator {
 			UNIQUE KEY unique_tap (beer_id, taproom_id)
 		) $charset_collate;";
 
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-		dbDelta( $sql );
+		dbDelta( $sql_taplist );
+
+		// Table for containers (serving sizes and prices)
+		// Each taplist item can have multiple containers (e.g., 3oz, 6oz, 12oz, crowler, 6-pack)
+		$containers_table = $wpdb->prefix . 'ontap_containers';
+		$sql_containers = "CREATE TABLE $containers_table (
+			id bigint(20) NOT NULL AUTO_INCREMENT,
+			taplist_id bigint(20) NOT NULL,
+			container_type varchar(50) DEFAULT NULL,
+			size varchar(50) NOT NULL,
+			price decimal(10,2) DEFAULT NULL,
+			is_available tinyint(1) DEFAULT 1,
+			sort_order int(11) DEFAULT 0,
+			untappd_container_id varchar(100) DEFAULT NULL,
+			date_added datetime DEFAULT CURRENT_TIMESTAMP,
+			date_modified datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+			PRIMARY KEY  (id),
+			KEY taplist_id (taplist_id),
+			KEY is_available (is_available),
+			KEY sort_order (sort_order)
+		) $charset_collate;";
+
+		dbDelta( $sql_containers );
 
 		// Store database version for future migrations
 		update_option( 'ontap_db_version', ONTAP_VERSION );
