@@ -271,6 +271,12 @@ class Settings {
 				echo \OnTap\Debug_Logger::get_formatted_logs( 100 );
 				?>
 			</div>
+
+			<hr>
+
+			<h2><?php esc_html_e( 'Sync History', 'ontap' ); ?></h2>
+			<p><?php esc_html_e( 'View the history of all sync operations.', 'ontap' ); ?></p>
+			<?php $this->render_sync_history(); ?>
 		</div>
 		<?php
 	}
@@ -441,5 +447,78 @@ class Settings {
 		$sanitized['delete_on_uninstall'] = isset( $input['delete_on_uninstall'] ) ? true : false;
 
 		return $sanitized;
+	}
+
+	/**
+	 * Render sync history table
+	 *
+	 * @return void
+	 */
+	private function render_sync_history() {
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'ontap_sync_history';
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$history = $wpdb->get_results(
+			"SELECT * FROM {$table} ORDER BY sync_date DESC LIMIT 50"
+		);
+
+		if ( empty( $history ) ) {
+			?>
+			<p class="description"><?php esc_html_e( 'No sync history available yet.', 'ontap' ); ?></p>
+			<?php
+			return;
+		}
+
+		?>
+		<table class="wp-list-table widefat fixed striped">
+			<thead>
+				<tr>
+					<th><?php esc_html_e( 'Date', 'ontap' ); ?></th>
+					<th><?php esc_html_e( 'Status', 'ontap' ); ?></th>
+					<th><?php esc_html_e( 'Beers Created', 'ontap' ); ?></th>
+					<th><?php esc_html_e( 'Beers Updated', 'ontap' ); ?></th>
+					<th><?php esc_html_e( 'Taplist Items', 'ontap' ); ?></th>
+					<th><?php esc_html_e( 'Containers', 'ontap' ); ?></th>
+					<th><?php esc_html_e( 'Duration', 'ontap' ); ?></th>
+					<th><?php esc_html_e( 'Errors', 'ontap' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $history as $record ) : ?>
+					<tr>
+						<td><?php echo esc_html( $record->sync_date ); ?></td>
+						<td>
+							<?php if ( 'success' === $record->status ) : ?>
+								<span style="color: #46b450;">✓ <?php esc_html_e( 'Success', 'ontap' ); ?></span>
+							<?php else : ?>
+								<span style="color: #dc3232;">✗ <?php esc_html_e( 'Error', 'ontap' ); ?></span>
+							<?php endif; ?>
+						</td>
+						<td><?php echo esc_html( $record->beers_created ); ?></td>
+						<td><?php echo esc_html( $record->beers_updated ); ?></td>
+						<td><?php echo esc_html( $record->taplist_synced ); ?></td>
+						<td><?php echo esc_html( $record->containers_synced ); ?></td>
+						<td><?php echo esc_html( round( $record->duration, 2 ) . 's' ); ?></td>
+						<td>
+							<?php if ( $record->error_count > 0 ) : ?>
+								<details>
+									<summary style="cursor: pointer; color: #dc3232;">
+										<?php echo esc_html( sprintf( __( '%d errors', 'ontap' ), $record->error_count ) ); ?>
+									</summary>
+									<pre style="margin-top: 5px; padding: 5px; background: #f9f9f9; overflow-x: auto; font-size: 11px;">
+										<?php echo esc_html( $record->error_messages ); ?>
+									</pre>
+								</details>
+							<?php else : ?>
+								—
+							<?php endif; ?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<?php
 	}
 }

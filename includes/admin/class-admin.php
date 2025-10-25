@@ -56,6 +56,18 @@ class Admin {
 				true
 			);
 
+			// Enqueue taplist manager script on the manage taplist page
+			if ( 'ontap_page_ontap-manage-taplist' === $hook ) {
+				wp_enqueue_script( 'jquery-ui-sortable' );
+				wp_enqueue_script(
+					'ontap-taplist-manager',
+					ONTAP_PLUGIN_URL . 'assets/js/taplist-manager.js',
+					array( 'jquery', 'jquery-ui-sortable' ),
+					ONTAP_VERSION,
+					true
+				);
+			}
+
 			// Localize script with ajax URL and nonce
 			wp_localize_script(
 				'ontap-admin',

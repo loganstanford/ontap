@@ -42,6 +42,13 @@ class Plugin {
 	public $settings;
 
 	/**
+	 * Taplist Manager handler
+	 *
+	 * @var Admin\Taplist_Manager
+	 */
+	public $taplist_manager;
+
+	/**
 	 * API handler
 	 *
 	 * @var API\Untappd_Client
@@ -77,9 +84,10 @@ class Plugin {
 	 */
 	private function load_dependencies() {
 		// Core components will be autoloaded
-		$this->post_types = new Post_Types();
-		$this->admin      = new Admin\Admin();
-		$this->settings   = new Admin\Settings();
+		$this->post_types      = new Post_Types();
+		$this->admin           = new Admin\Admin();
+		$this->settings        = new Admin\Settings();
+		$this->taplist_manager = new Admin\Taplist_Manager();
 
 		// Admin-only components
 		if ( is_admin() ) {
@@ -120,6 +128,7 @@ class Plugin {
 		add_action( 'admin_enqueue_scripts', array( $this->admin, 'enqueue_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this->admin, 'enqueue_scripts' ) );
 		add_action( 'admin_menu', array( $this->settings, 'add_menu_pages' ) );
+		add_action( 'admin_menu', array( $this->taplist_manager, 'add_menu_page' ), 15 );
 		add_action( 'admin_init', array( $this->settings, 'register_settings' ) );
 	}
 

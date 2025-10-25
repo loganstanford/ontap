@@ -66,6 +66,8 @@ class Sync_Manager {
 	public function sync_all() {
 		$this->reset_results();
 
+		$start_time = microtime( true );
+
 		Debug_Logger::log( 'Starting sync of all taprooms', 'info' );
 
 		// Get all taproom terms
@@ -103,6 +105,8 @@ class Sync_Manager {
 		$this->results['success'] = empty( $this->results['errors'] );
 		$this->results['message']  = $this->get_summary_message();
 
+		$duration = microtime( true ) - $start_time;
+
 		Debug_Logger::log(
 			'Sync completed',
 			$this->results['success'] ? 'info' : 'error',
@@ -112,8 +116,12 @@ class Sync_Manager {
 				'taplist_synced'     => $this->results['taplist_synced'],
 				'containers_synced'  => $this->results['containers_synced'],
 				'errors'             => $this->results['errors'],
+				'duration'           => round( $duration, 2 ) . 's',
 			)
 		);
+
+		// Record sync history
+		$this->record_sync_history( $duration );
 
 		return $this->results;
 	}
@@ -507,5 +515,48 @@ class Sync_Manager {
 	 */
 	public function get_results() {
 		return $this->results;
+	}
+
+	/**
+	 * Record sync history to database
+	 *
+	 * @param float $duration Sync duration in seconds.
+	 * @return void
+	 */
+	private function record_sync_history( $duration ) {
+		global $wpdb;
+
+		$table = $wpdb->prefix . 'ontap_sync_history';
+
+		$error_messages = null;
+		if ( ! empty( $this->results['errors'] ) ) {
+			$error_messages = wp_json_encode( $this->results['errors'] );
+		}
+
+		$wpdb->insert(
+			$table,
+			array(
+				'status'             => $this->results['success'] ? 'success' : 'error',
+				'beers_created'      => $this->results['beers_created'],
+				'beers_updated'      => $this->results['beers_updated'],
+				'taplist_synced'     => $this->results['taplist_synced'],
+				'containers_synced'  => $this->results['containers_synced'],
+				'error_count'        => count( $this->results['errors'] ),
+				'error_messages'     => $error_messages,
+				'duration'           => $duration,
+				'triggered_by'       => 'manual', // Will expand this later for cron
+			),
+			array(
+				'%s',
+				'%d',
+				'%d',
+				'%d',
+				'%d',
+				'%d',
+				'%s',
+				'%f',
+				'%s',
+			)
+		);
 	}
 }

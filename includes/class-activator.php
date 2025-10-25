@@ -82,6 +82,27 @@ class Activator {
 
 		dbDelta( $sql_containers );
 
+		// Table for sync history
+		$sync_history_table = $wpdb->prefix . 'ontap_sync_history';
+		$sql_sync_history = "CREATE TABLE $sync_history_table (
+			id bigint(20) NOT NULL AUTO_INCREMENT,
+			sync_date datetime DEFAULT CURRENT_TIMESTAMP,
+			status varchar(20) NOT NULL,
+			beers_created int(11) DEFAULT 0,
+			beers_updated int(11) DEFAULT 0,
+			taplist_synced int(11) DEFAULT 0,
+			containers_synced int(11) DEFAULT 0,
+			error_count int(11) DEFAULT 0,
+			error_messages text DEFAULT NULL,
+			duration float DEFAULT NULL,
+			triggered_by varchar(50) DEFAULT 'manual',
+			PRIMARY KEY  (id),
+			KEY status (status),
+			KEY sync_date (sync_date)
+		) $charset_collate;";
+
+		dbDelta( $sql_sync_history );
+
 		// Store database version for future migrations
 		update_option( 'ontap_db_version', ONTAP_VERSION );
 	}
