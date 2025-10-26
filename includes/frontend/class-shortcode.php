@@ -186,10 +186,18 @@ class Shortcode {
 				$beer->abv         = get_post_meta( $beer->beer_id, 'abv', true );
 				$beer->ibu         = get_post_meta( $beer->beer_id, 'ibu', true );
 				$beer->description = get_post_meta( $beer->beer_id, 'description', true );
-				$beer->label_url   = get_post_meta( $beer->beer_id, 'label_url', true );
+
+				// Get featured image (post thumbnail) - fallback to label_url meta if no thumbnail
+				$thumbnail_id = get_post_thumbnail_id( $beer->beer_id );
+				if ( $thumbnail_id ) {
+					$beer->image_url = get_the_post_thumbnail_url( $beer->beer_id, 'medium' );
+				} else {
+					// Fallback to Untappd label URL
+					$beer->image_url = get_post_meta( $beer->beer_id, 'label_url', true );
+				}
 
 				// Get styles
-				$beer->styles = wp_get_post_terms( $beer->beer_id, 'beer_style' );
+				$beer->styles = wp_get_post_terms( $beer->beer_id, 'ontap_style' );
 			}
 		}
 
@@ -398,8 +406,8 @@ class Shortcode {
 		// Image
 		if ( $atts['show_image'] ) {
 			echo '<div class="ontap-beer-image">';
-			if ( ! empty( $beer->label_url ) ) {
-				echo '<img src="' . esc_url( $beer->label_url ) . '" alt="' . esc_attr( $beer->post_title ) . '" />';
+			if ( ! empty( $beer->image_url ) ) {
+				echo '<img src="' . esc_url( $beer->image_url ) . '" alt="' . esc_attr( $beer->post_title ) . '" />';
 			} else {
 				echo '<div class="ontap-beer-placeholder"></div>';
 			}
@@ -470,8 +478,8 @@ class Shortcode {
 		// Image
 		if ( $atts['show_image'] ) {
 			echo '<div class="ontap-beer-image">';
-			if ( ! empty( $beer->label_url ) ) {
-				echo '<img src="' . esc_url( $beer->label_url ) . '" alt="' . esc_attr( $beer->post_title ) . '" />';
+			if ( ! empty( $beer->image_url ) ) {
+				echo '<img src="' . esc_url( $beer->image_url ) . '" alt="' . esc_attr( $beer->post_title ) . '" />';
 			} else {
 				echo '<div class="ontap-beer-placeholder"></div>';
 			}
@@ -553,8 +561,8 @@ class Shortcode {
 		// Image
 		if ( $atts['show_image'] ) {
 			echo '<td class="ontap-beer-image">';
-			if ( ! empty( $beer->label_url ) ) {
-				echo '<img src="' . esc_url( $beer->label_url ) . '" alt="' . esc_attr( $beer->post_title ) . '" width="50" />';
+			if ( ! empty( $beer->image_url ) ) {
+				echo '<img src="' . esc_url( $beer->image_url ) . '" alt="' . esc_attr( $beer->post_title ) . '" width="50" />';
 			}
 			echo '</td>';
 		}

@@ -448,8 +448,16 @@ class Ajax {
 		$abv         = get_post_meta( $beer_id, 'abv', true );
 		$ibu         = get_post_meta( $beer_id, 'ibu', true );
 		$description = get_post_meta( $beer_id, 'description', true );
-		$label_url   = get_post_meta( $beer_id, 'label_url', true );
 		$brewery     = get_post_meta( $beer_id, 'brewery_name', true );
+
+		// Get featured image (post thumbnail) - fallback to label_url meta if no thumbnail
+		$thumbnail_id = get_post_thumbnail_id( $beer_id );
+		if ( $thumbnail_id ) {
+			$image_url = get_the_post_thumbnail_url( $beer_id, 'large' );
+		} else {
+			// Fallback to Untappd label URL
+			$image_url = get_post_meta( $beer_id, 'label_url', true );
+		}
 
 		// Get styles
 		$styles = wp_get_post_terms( $beer_id, 'beer_style' );
@@ -479,9 +487,9 @@ class Ajax {
 		ob_start();
 		?>
 		<div class="ontap-modal-beer-details">
-			<?php if ( ! empty( $label_url ) ) : ?>
+			<?php if ( ! empty( $image_url ) ) : ?>
 				<div class="ontap-modal-image">
-					<img src="<?php echo esc_url( $label_url ); ?>" alt="<?php echo esc_attr( $beer->post_title ); ?>" />
+					<img src="<?php echo esc_url( $image_url ); ?>" alt="<?php echo esc_attr( $beer->post_title ); ?>" />
 				</div>
 			<?php endif; ?>
 
