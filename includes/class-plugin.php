@@ -56,6 +56,20 @@ class Plugin {
 	public $api_client;
 
 	/**
+	 * Frontend handler
+	 *
+	 * @var Frontend\Frontend
+	 */
+	public $frontend;
+
+	/**
+	 * Shortcode handler
+	 *
+	 * @var Frontend\Shortcode
+	 */
+	public $shortcode;
+
+	/**
 	 * Get the singleton instance
 	 *
 	 * @return Plugin
@@ -89,11 +103,21 @@ class Plugin {
 		$this->settings        = new Admin\Settings();
 		$this->taplist_manager = new Admin\Taplist_Manager();
 
+		// Frontend components
+		$this->frontend  = new Frontend\Frontend();
+		$this->shortcode = new Frontend\Shortcode();
+
+		// Blocks
+		new Blocks\Taplist_Block();
+
 		// Admin-only components
 		if ( is_admin() ) {
 			new Admin\Ajax();
 			new Admin\Term_Meta();
 		}
+
+		// Elementor integration (if Elementor is active)
+		add_action( 'plugins_loaded', array( $this, 'init_integrations' ) );
 	}
 
 	/**
@@ -130,6 +154,7 @@ class Plugin {
 		add_action( 'admin_menu', array( $this->settings, 'add_menu_pages' ) );
 		add_action( 'admin_menu', array( $this->taplist_manager, 'add_menu_page' ), 15 );
 		add_action( 'admin_init', array( $this->settings, 'register_settings' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_block_editor_assets' ) );
 	}
 
 	/**
@@ -139,27 +164,32 @@ class Plugin {
 	 */
 	private function define_public_hooks() {
 		// Public hooks will be defined here
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_public_assets' ) );
+		add_action( 'wp_enqueue_scripts', array( $this->frontend, 'enqueue_styles' ) );
+		add_action( 'wp_enqueue_scripts', array( $this->frontend, 'enqueue_scripts' ) );
 	}
 
 	/**
-	 * Enqueue public assets
+	 * Initialize integrations with third-party plugins
 	 *
 	 * @return void
 	 */
-	public function enqueue_public_assets() {
-		wp_enqueue_style(
-			'ontap-public',
-			ONTAP_PLUGIN_URL . 'assets/css/public.css',
-			array(),
-			ONTAP_VERSION,
-			'all'
-		);
+	public function init_integrations() {
+		// Elementor integration
+		if ( did_action( 'elementor/loaded' ) ) {
+			new Integrations\Elementor();
+		}
+	}
 
+	/**
+	 * Enqueue block editor assets
+	 *
+	 * @return void
+	 */
+	public function enqueue_block_editor_assets() {
 		wp_enqueue_script(
-			'ontap-public',
-			ONTAP_PLUGIN_URL . 'assets/js/public.js',
-			array( 'jquery' ),
+			'ontap-taplist-block',
+			ONTAP_PLUGIN_URL . 'assets/js/blocks/taplist-block.js',
+			array( 'wp-blocks', 'wp-element', 'wp-editor', 'wp-components', 'wp-i18n' ),
 			ONTAP_VERSION,
 			true
 		);

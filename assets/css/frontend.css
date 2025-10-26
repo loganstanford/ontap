@@ -1,0 +1,585 @@
+/**
+ * OnTap Frontend Styles
+ *
+ * @package OnTap
+ * @since   1.0.0
+ */
+
+/* ==========================================================================
+   Variables
+   ========================================================================== */
+:root {
+    --ontap-primary-color: #d4af37;
+    --ontap-secondary-color: #2c3e50;
+    --ontap-text-color: #333;
+    --ontap-light-gray: #f5f5f5;
+    --ontap-border-color: #ddd;
+    --ontap-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ==========================================================================
+   Wrapper
+   ========================================================================== */
+.ontap-taplist-wrapper {
+    margin: 2rem 0;
+}
+
+/* ==========================================================================
+   Controls (Search, Filters, Sort)
+   ========================================================================== */
+.ontap-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: var(--ontap-light-gray);
+    border-radius: 8px;
+}
+
+.ontap-search {
+    flex: 1;
+    min-width: 250px;
+}
+
+.ontap-search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--ontap-border-color);
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.ontap-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.ontap-filter-btn {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--ontap-border-color);
+    background: white;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.ontap-filter-btn:hover {
+    background: var(--ontap-primary-color);
+    color: white;
+    border-color: var(--ontap-primary-color);
+}
+
+.ontap-filter-btn.active {
+    background: var(--ontap-secondary-color);
+    color: white;
+    border-color: var(--ontap-secondary-color);
+}
+
+.ontap-sort {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.ontap-sort-select {
+    padding: 0.5rem;
+    border: 1px solid var(--ontap-border-color);
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* ==========================================================================
+   Grid Layout
+   ========================================================================== */
+.ontap-layout-grid {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.ontap-layout-grid[data-columns="1"] {
+    grid-template-columns: 1fr;
+}
+
+.ontap-layout-grid[data-columns="2"] {
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+}
+
+.ontap-layout-grid[data-columns="3"] {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.ontap-layout-grid[data-columns="4"] {
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+.ontap-layout-grid[data-columns="5"],
+.ontap-layout-grid[data-columns="6"] {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+}
+
+/* Beer Card */
+.ontap-beer-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    border: 1px solid var(--ontap-border-color);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--ontap-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ontap-beer-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ontap-tap-badge {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: var(--ontap-primary-color);
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0.5rem 0.75rem;
+    border-radius: 50%;
+    min-width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.ontap-beer-image {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--ontap-light-gray);
+    overflow: hidden;
+}
+
+.ontap-beer-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.ontap-beer-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ontap-beer-content {
+    padding: 1.5rem;
+    flex: 1;
+}
+
+.ontap-beer-title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--ontap-secondary-color);
+}
+
+.ontap-beer-style {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 0.75rem;
+    font-style: italic;
+}
+
+.ontap-beer-stats {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ontap-text-color);
+}
+
+.ontap-stat-abv,
+.ontap-stat-ibu {
+    padding: 0.25rem 0.5rem;
+    background: var(--ontap-light-gray);
+    border-radius: 4px;
+}
+
+.ontap-beer-description {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 1rem;
+}
+
+.ontap-beer-description p {
+    margin: 0 0 0.5rem 0;
+}
+
+.ontap-beer-containers {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.ontap-container {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background: var(--ontap-primary-color);
+    color: white;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.ontap-view-details {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: var(--ontap-secondary-color);
+    color: white;
+    border: none;
+    border-radius: 0 0 8px 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.3s ease;
+}
+
+.ontap-view-details:hover {
+    background: var(--ontap-primary-color);
+}
+
+/* ==========================================================================
+   List Layout
+   ========================================================================== */
+.ontap-layout-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.ontap-beer-list-item {
+    display: flex;
+    gap: 1.5rem;
+    background: white;
+    border: 1px solid var(--ontap-border-color);
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: var(--ontap-shadow);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ontap-beer-list-item:hover {
+    transform: translateX(4px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ontap-beer-list-item .ontap-beer-image {
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+    border-radius: 8px;
+}
+
+.ontap-beer-list-item .ontap-beer-image img {
+    border-radius: 8px;
+}
+
+.ontap-beer-info {
+    flex: 1;
+}
+
+.ontap-beer-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.ontap-tap-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 40px;
+    height: 40px;
+    background: var(--ontap-primary-color);
+    color: white;
+    font-weight: bold;
+    border-radius: 50%;
+    font-size: 14px;
+}
+
+.ontap-beer-list-item .ontap-beer-title {
+    margin: 0;
+}
+
+.ontap-beer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: center;
+    align-items: flex-end;
+    text-align: right;
+}
+
+/* ==========================================================================
+   Table Layout
+   ========================================================================== */
+.ontap-layout-table {
+    width: 100%;
+}
+
+.ontap-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    box-shadow: var(--ontap-shadow);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ontap-table thead {
+    background: var(--ontap-secondary-color);
+    color: white;
+}
+
+.ontap-table th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+}
+
+.ontap-table tbody tr {
+    border-bottom: 1px solid var(--ontap-border-color);
+    transition: background 0.2s ease;
+}
+
+.ontap-table tbody tr:hover {
+    background: var(--ontap-light-gray);
+}
+
+.ontap-table td {
+    padding: 1rem;
+}
+
+.ontap-table .ontap-tap-number {
+    font-weight: bold;
+    color: var(--ontap-primary-color);
+}
+
+.ontap-table .ontap-beer-image img {
+    width: 50px;
+    height: auto;
+    border-radius: 4px;
+}
+
+.ontap-table .ontap-beer-name {
+    font-weight: 600;
+    color: var(--ontap-secondary-color);
+}
+
+/* ==========================================================================
+   Pagination
+   ========================================================================== */
+.ontap-pagination {
+    margin-top: 3rem;
+    text-align: center;
+}
+
+.ontap-pagination .page-numbers {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    margin: 0 0.25rem;
+    background: white;
+    border: 1px solid var(--ontap-border-color);
+    border-radius: 4px;
+    color: var(--ontap-text-color);
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.ontap-pagination .page-numbers:hover {
+    background: var(--ontap-primary-color);
+    color: white;
+    border-color: var(--ontap-primary-color);
+}
+
+.ontap-pagination .page-numbers.current {
+    background: var(--ontap-secondary-color);
+    color: white;
+    border-color: var(--ontap-secondary-color);
+}
+
+/* ==========================================================================
+   Beer Detail Modal
+   ========================================================================== */
+.ontap-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 9998;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.ontap-modal-overlay.active {
+    display: flex;
+}
+
+.ontap-modal {
+    position: relative;
+    background: white;
+    border-radius: 12px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.ontap-modal-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 40px;
+    height: 40px;
+    background: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 24px;
+    line-height: 1;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease;
+}
+
+.ontap-modal-close:hover {
+    transform: scale(1.1);
+}
+
+.ontap-modal-content {
+    display: flex;
+    gap: 2rem;
+    padding: 2rem;
+}
+
+.ontap-modal-image {
+    flex: 0 0 300px;
+}
+
+.ontap-modal-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.ontap-modal-info {
+    flex: 1;
+}
+
+.ontap-modal-title {
+    margin: 0 0 1rem 0;
+    font-size: 2rem;
+    color: var(--ontap-secondary-color);
+}
+
+/* ==========================================================================
+   No Results
+   ========================================================================== */
+.ontap-no-beers {
+    text-align: center;
+    padding: 3rem;
+    font-size: 1.2rem;
+    color: #999;
+}
+
+/* ==========================================================================
+   Hidden Elements
+   ========================================================================== */
+.ontap-hidden {
+    display: none !important;
+}
+
+/* ==========================================================================
+   Responsive Design
+   ========================================================================== */
+@media (max-width: 768px) {
+    .ontap-controls {
+        flex-direction: column;
+    }
+
+    .ontap-search {
+        min-width: 100%;
+    }
+
+    .ontap-filters {
+        justify-content: center;
+    }
+
+    .ontap-layout-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .ontap-beer-list-item {
+        flex-direction: column;
+    }
+
+    .ontap-beer-list-item .ontap-beer-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .ontap-beer-meta {
+        align-items: flex-start;
+        text-align: left;
+    }
+
+    .ontap-modal-content {
+        flex-direction: column;
+    }
+
+    .ontap-modal-image {
+        flex: 1;
+    }
+
+    .ontap-table {
+        font-size: 0.85rem;
+    }
+
+    .ontap-table th,
+    .ontap-table td {
+        padding: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .ontap-beer-title {
+        font-size: 1.25rem;
+    }
+
+    .ontap-beer-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
