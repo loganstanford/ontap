@@ -74,7 +74,7 @@ class Taplist_List_Widget extends Widget_Base {
 		// Taproom selection
 		$taprooms = get_terms(
 			array(
-				'taxonomy'   => 'taproom',
+				'taxonomy'   => 'ontap_taproom',
 				'hide_empty' => false,
 			)
 		);
