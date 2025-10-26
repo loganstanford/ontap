@@ -112,7 +112,7 @@ class Shortcode {
 				)
 			);
 
-			return ! empty( $terms ) ? $terms[0]->term_id : 0;
+			return ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->term_id : 0;
 		}
 
 		// Try to get by slug first
