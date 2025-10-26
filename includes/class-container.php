@@ -217,7 +217,7 @@ class Container {
 			$parts[] = $container->size;
 		}
 
-		if ( ! empty( $container->container_type ) && $container->container_type !== 'Draft' ) {
+		if ( ! empty( $container->container_type ) && $container->container_type !== 'Draft' && $container->container_type !== $container->size ) {
 			$parts[] = $container->container_type;
 		}
 

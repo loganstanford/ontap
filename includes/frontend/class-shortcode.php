@@ -238,7 +238,7 @@ class Shortcode {
 		if ( $atts['show_filters'] ) {
 			$styles = get_terms(
 				array(
-					'taxonomy'   => 'beer_style',
+					'taxonomy'   => 'ontap_style',
 					'hide_empty' => true,
 				)
 			);
