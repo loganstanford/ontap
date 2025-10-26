@@ -193,7 +193,7 @@ class Shortcode {
 					$beer->image_url = get_the_post_thumbnail_url( $beer->beer_id, 'medium' );
 				} else {
 					// Fallback to Untappd label URL
-					$beer->image_url = get_post_meta( $beer->beer_id, 'label_url', true );
+					$beer->image_url = get_post_meta( $beer->beer_id, 'label_image', true );
 				}
 
 				// Get styles
