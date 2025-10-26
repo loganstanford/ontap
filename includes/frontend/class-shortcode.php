@@ -31,24 +31,25 @@ class Shortcode {
 	public function render_taplist( $atts ) {
 		$atts = shortcode_atts(
 			array(
-				'taproom'        => '',
-				'layout'         => 'grid',
-				'columns'        => '3',
-				'show_filters'   => 'yes',
-				'show_search'    => 'yes',
-				'show_sort'      => 'yes',
-				'show_image'     => 'yes',
-				'show_style'     => 'yes',
-				'show_abv'       => 'yes',
-				'show_ibu'       => 'yes',
+				'taproom'          => '',
+				'taprooms'         => '',
+				'layout'           => 'grid',
+				'columns'          => '3',
+				'show_filters'     => 'yes',
+				'show_search'      => 'yes',
+				'show_sort'        => 'yes',
+				'show_image'       => 'yes',
+				'show_style'       => 'yes',
+				'show_abv'         => 'yes',
+				'show_ibu'         => 'yes',
 				'show_description' => 'yes',
-				'show_tap_number' => 'yes',
-				'show_containers' => 'yes',
+				'show_tap_number'  => 'yes',
+				'show_containers'  => 'yes',
 				'show_availability' => 'yes',
-				'posts_per_page' => '12',
-				'pagination'     => 'yes',
-				'order_by'       => 'tap_number',
-				'order'          => 'ASC',
+				'posts_per_page'   => '12',
+				'pagination'       => 'yes',
+				'order_by'         => 'tap_number',
+				'order'            => 'ASC',
 			),
 			$atts,
 			'ontap_taplist'
@@ -61,11 +62,12 @@ class Shortcode {
 			}
 		}
 
-		// Get taproom ID
-		$taproom_id = $this->get_taproom_id( $atts['taproom'] );
+		// Get taproom IDs (support both taproom and taprooms parameters)
+		$taproom_param = ! empty( $atts['taprooms'] ) ? $atts['taprooms'] : $atts['taproom'];
+		$taproom_ids   = $this->get_taproom_ids( $taproom_param );
 
 		// Get beers on tap
-		$beers = $this->get_beers_on_tap( $taproom_id, $atts );
+		$beers = $this->get_beers_on_tap( $taproom_ids, $atts );
 
 		// Start output buffering
 		ob_start();
@@ -96,49 +98,51 @@ class Shortcode {
 	}
 
 	/**
-	 * Get taproom ID from slug or name
+	 * Get taproom IDs from slug(s), name(s), or ID(s)
 	 *
-	 * @param string $taproom Taproom slug or name.
-	 * @return int Taproom term ID
+	 * @param string $taprooms Comma-separated taproom slugs, names, or IDs.
+	 * @return array Array of taproom term IDs
 	 */
-	private function get_taproom_id( $taproom ) {
-		if ( empty( $taproom ) ) {
-			// Get first taproom
-			$terms = get_terms(
-				array(
-					'taxonomy'   => 'taproom',
-					'hide_empty' => false,
-					'number'     => 1,
-				)
-			);
-
-			return ( ! empty( $terms ) && ! is_wp_error( $terms ) ) ? $terms[0]->term_id : 0;
+	private function get_taproom_ids( $taprooms ) {
+		if ( empty( $taprooms ) ) {
+			// Return empty array to show all taprooms
+			return array();
 		}
 
-		// Try to get by slug first
-		$term = get_term_by( 'slug', $taproom, 'taproom' );
+		// Split by comma and trim
+		$taproom_array = array_map( 'trim', explode( ',', $taprooms ) );
+		$taproom_ids   = array();
 
-		if ( ! $term ) {
-			// Try by name
-			$term = get_term_by( 'name', $taproom, 'taproom' );
+		foreach ( $taproom_array as $taproom ) {
+			// Try to get by slug first
+			$term = get_term_by( 'slug', $taproom, 'taproom' );
+
+			if ( ! $term ) {
+				// Try by name
+				$term = get_term_by( 'name', $taproom, 'taproom' );
+			}
+
+			if ( ! $term && is_numeric( $taproom ) ) {
+				// Try by ID
+				$term = get_term_by( 'id', $taproom, 'taproom' );
+			}
+
+			if ( $term && ! is_wp_error( $term ) ) {
+				$taproom_ids[] = $term->term_id;
+			}
 		}
 
-		if ( ! $term ) {
-			// Try by ID
-			$term = get_term_by( 'id', $taproom, 'taproom' );
-		}
-
-		return $term ? $term->term_id : 0;
+		return $taproom_ids;
 	}
 
 	/**
 	 * Get beers currently on tap
 	 *
-	 * @param int   $taproom_id Taproom ID.
-	 * @param array $atts       Shortcode attributes.
+	 * @param array $taproom_ids Array of taproom IDs (empty for all).
+	 * @param array $atts        Shortcode attributes.
 	 * @return array Array of beer objects with taplist data
 	 */
-	private function get_beers_on_tap( $taproom_id, $atts ) {
+	private function get_beers_on_tap( $taproom_ids, $atts ) {
 		global $wpdb;
 
 		$taplist_table = $wpdb->prefix . 'ontap_taplist';
@@ -153,18 +157,22 @@ class Shortcode {
 		$offset       = ( $paged - 1 ) * $per_page;
 		$limit_clause = $atts['pagination'] ? "LIMIT {$per_page} OFFSET {$offset}" : '';
 
+		// Build WHERE clause for taprooms
+		$taproom_where = '';
+		if ( ! empty( $taproom_ids ) ) {
+			$placeholders  = implode( ',', array_fill( 0, count( $taproom_ids ), '%d' ) );
+			$taproom_where = $wpdb->prepare( "AND t.taproom_id IN ({$placeholders})", $taproom_ids );
+		}
+
 		// Query
-		$query = $wpdb->prepare(
-			"SELECT t.*, p.*
+		$query = "SELECT t.*, p.*
 			FROM {$taplist_table} t
 			LEFT JOIN {$posts_table} p ON t.beer_id = p.ID
-			WHERE t.taproom_id = %d
-			AND t.is_available = 1
+			WHERE t.is_available = 1
 			AND p.post_status = 'publish'
+			{$taproom_where}
 			ORDER BY {$order_by}
-			{$limit_clause}",
-			$taproom_id
-		);
+			{$limit_clause}";
 
 		$results = $wpdb->get_results( $query );
 
@@ -597,13 +605,18 @@ class Shortcode {
 
 		// Get total count
 		$taplist_table = $wpdb->prefix . 'ontap_taplist';
-		$taproom_id    = $this->get_taproom_id( $atts['taproom'] );
+		$taproom_param = ! empty( $atts['taprooms'] ) ? $atts['taprooms'] : $atts['taproom'];
+		$taproom_ids   = $this->get_taproom_ids( $taproom_param );
+
+		// Build WHERE clause for taprooms
+		$taproom_where = '';
+		if ( ! empty( $taproom_ids ) ) {
+			$placeholders  = implode( ',', array_fill( 0, count( $taproom_ids ), '%d' ) );
+			$taproom_where = $wpdb->prepare( "AND taproom_id IN ({$placeholders})", $taproom_ids );
+		}
 
 		$total = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$taplist_table} WHERE taproom_id = %d AND is_available = 1",
-				$taproom_id
-			)
+			"SELECT COUNT(*) FROM {$taplist_table} WHERE is_available = 1 {$taproom_where}"
 		);
 
 		$paged     = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;

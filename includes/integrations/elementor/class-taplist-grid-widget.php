@@ -79,7 +79,7 @@ class Taplist_Grid_Widget extends Widget_Base {
 			)
 		);
 
-		$taproom_options = array( '' => __( 'All Taprooms', 'ontap' ) );
+		$taproom_options = array();
 		if ( ! empty( $taprooms ) && ! is_wp_error( $taprooms ) ) {
 			foreach ( $taprooms as $taproom ) {
 				$taproom_options[ $taproom->slug ] = $taproom->name;
@@ -87,12 +87,15 @@ class Taplist_Grid_Widget extends Widget_Base {
 		}
 
 		$this->add_control(
-			'taproom',
+			'taprooms',
 			array(
-				'label'   => __( 'Taproom', 'ontap' ),
-				'type'    => Controls_Manager::SELECT,
-				'options' => $taproom_options,
-				'default' => '',
+				'label'       => __( 'Taprooms', 'ontap' ),
+				'type'        => Controls_Manager::SELECT2,
+				'options'     => $taproom_options,
+				'multiple'    => true,
+				'label_block' => true,
+				'default'     => array(),
+				'description' => __( 'Leave empty to show all taprooms', 'ontap' ),
 			)
 		);
 
@@ -658,9 +661,15 @@ class Taplist_Grid_Widget extends Widget_Base {
 	protected function render() {
 		$settings = $this->get_settings_for_display();
 
+		// Convert taprooms array to comma-separated string
+		$taprooms = '';
+		if ( ! empty( $settings['taprooms'] ) && is_array( $settings['taprooms'] ) ) {
+			$taprooms = implode( ',', $settings['taprooms'] );
+		}
+
 		// Build shortcode attributes
 		$atts = array(
-			'taproom'          => $settings['taproom'],
+			'taprooms'         => $taprooms,
 			'layout'           => 'grid',
 			'columns'          => $settings['columns'],
 			'show_filters'     => $settings['show_filters'],
