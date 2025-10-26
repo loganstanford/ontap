@@ -183,9 +183,11 @@ class Shortcode {
 				$beer->containers = Container::get_containers( $beer->id, true );
 
 				// Get meta
-				$beer->abv         = get_post_meta( $beer->beer_id, 'abv', true );
-				$beer->ibu         = get_post_meta( $beer->beer_id, 'ibu', true );
-				$beer->description = get_post_meta( $beer->beer_id, 'description', true );
+				$beer->abv = get_post_meta( $beer->beer_id, 'abv', true );
+				$beer->ibu = get_post_meta( $beer->beer_id, 'ibu', true );
+
+				// Description is stored in post_content (already available from query)
+				// No need to fetch separately - it's already in $beer->post_content
 
 				// Get featured image (post thumbnail) - fallback to label_url meta if no thumbnail
 				$thumbnail_id = get_post_thumbnail_id( $beer->beer_id );
@@ -440,8 +442,8 @@ class Shortcode {
 		}
 
 		// Description
-		if ( $atts['show_description'] && ! empty( $beer->description ) ) {
-			echo '<div class="ontap-beer-description">' . wp_kses_post( wpautop( $beer->description ) ) . '</div>';
+		if ( $atts['show_description'] && ! empty( $beer->post_content ) ) {
+			echo '<div class="ontap-beer-description">' . wp_kses_post( wpautop( $beer->post_content ) ) . '</div>';
 		}
 
 		// Containers
@@ -502,8 +504,8 @@ class Shortcode {
 		}
 
 		// Description
-		if ( $atts['show_description'] && ! empty( $beer->description ) ) {
-			echo '<div class="ontap-beer-description">' . wp_kses_post( wpautop( $beer->description ) ) . '</div>';
+		if ( $atts['show_description'] && ! empty( $beer->post_content ) ) {
+			echo '<div class="ontap-beer-description">' . wp_kses_post( wpautop( $beer->post_content ) ) . '</div>';
 		}
 
 		echo '</div>'; // .ontap-beer-info

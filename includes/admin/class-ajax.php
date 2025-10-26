@@ -447,8 +447,10 @@ class Ajax {
 		// Get beer meta
 		$abv         = get_post_meta( $beer_id, 'abv', true );
 		$ibu         = get_post_meta( $beer_id, 'ibu', true );
-		$description = get_post_meta( $beer_id, 'description', true );
 		$brewery     = get_post_meta( $beer_id, 'brewery_name', true );
+
+		// Description is in post_content
+		$description = $beer->post_content;
 
 		// Get featured image (post thumbnail) - fallback to label_url meta if no thumbnail
 		$thumbnail_id = get_post_thumbnail_id( $beer_id );
