@@ -72,10 +72,12 @@
                          description.indexOf(searchTerm) > -1;
 
             if (isMatch) {
-                $beer.removeClass('ontap-hidden');
+                // Show with animation
+                $beer.removeClass('ontap-hidden ontap-hiding');
                 visibleCount++;
             } else {
-                $beer.addClass('ontap-hidden');
+                // Hide with animation
+                animateHide($beer);
             }
         });
 
@@ -114,7 +116,7 @@
         var visibleCount = 0;
 
         if (styleId === 'all') {
-            $beers.removeClass('ontap-hidden');
+            $beers.removeClass('ontap-hidden ontap-hiding');
             visibleCount = $beers.length;
         } else {
             $beers.each(function() {
@@ -122,7 +124,7 @@
                 var styleIds = $beer.data('style-ids');
 
                 if (!styleIds) {
-                    $beer.addClass('ontap-hidden');
+                    animateHide($beer);
                     return;
                 }
 
@@ -130,10 +132,12 @@
                 var hasStyle = styleIdsArray.indexOf(styleId.toString()) > -1;
 
                 if (hasStyle) {
-                    $beer.removeClass('ontap-hidden');
+                    // Show with animation
+                    $beer.removeClass('ontap-hidden ontap-hiding');
                     visibleCount++;
                 } else {
-                    $beer.addClass('ontap-hidden');
+                    // Hide with animation
+                    animateHide($beer);
                 }
             });
         }
@@ -143,6 +147,24 @@
 
         // Update no results message
         updateNoResultsMessage($wrapper, visibleCount);
+    }
+
+    /**
+     * Animate hiding an element
+     */
+    function animateHide($element) {
+        // Add hiding class to trigger transition
+        if (!$element.hasClass('ontap-hidden')) {
+            $element.addClass('ontap-hiding');
+
+            // After transition completes, add hidden class
+            setTimeout(function() {
+                if ($element.hasClass('ontap-hiding')) {
+                    $element.addClass('ontap-hidden');
+                    $element.removeClass('ontap-hiding');
+                }
+            }, 300); // Match CSS transition duration
+        }
     }
 
     /**

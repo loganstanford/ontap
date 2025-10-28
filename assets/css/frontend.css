@@ -515,10 +515,46 @@
 }
 
 /* ==========================================================================
-   Hidden Elements
+   Hidden Elements & Transitions
    ========================================================================== */
+.ontap-beer-card,
+.ontap-beer-list-item,
+.ontap-beer-row {
+    transition: opacity 0.3s ease, transform 0.3s ease, height 0.3s ease, margin 0.3s ease;
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Hiding state - triggers the animation */
+.ontap-hiding {
+    opacity: 0 !important;
+    transform: scale(0.95) !important;
+}
+
+/* Hidden state - removes from layout after animation */
 .ontap-hidden {
-    display: none !important;
+    opacity: 0 !important;
+    transform: scale(0.95) !important;
+    pointer-events: none;
+    position: absolute !important;
+    left: -9999px !important;
+}
+
+/* For grid layouts, maintain space while animating */
+.ontap-taplist-grid .ontap-hiding {
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.ontap-taplist-grid .ontap-hidden {
+    position: relative !important;
+    left: 0 !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
 }
 
 /* ==========================================================================
