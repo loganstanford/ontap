@@ -196,6 +196,38 @@ class Taplist_List_Widget extends Widget_Base {
 			)
 		);
 
+		$this->add_control(
+			'show_parent_styles',
+			array(
+				'label'        => __( 'Show Parent Styles', 'ontap' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Show', 'ontap' ),
+				'label_off'    => __( 'Hide', 'ontap' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'description'  => __( 'Show main style categories (IPA, Stout, etc.)', 'ontap' ),
+				'condition'    => array(
+					'show_filters' => 'yes',
+				),
+			)
+		);
+
+		$this->add_control(
+			'show_child_styles',
+			array(
+				'label'        => __( 'Show Child Styles', 'ontap' ),
+				'type'         => Controls_Manager::SWITCHER,
+				'label_on'     => __( 'Show', 'ontap' ),
+				'label_off'    => __( 'Hide', 'ontap' ),
+				'return_value' => 'yes',
+				'default'      => 'yes',
+				'description'  => __( 'Show sub-styles (New England IPA, Imperial Stout, etc.)', 'ontap' ),
+				'condition'    => array(
+					'show_filters' => 'yes',
+				),
+			)
+		);
+
 		$this->end_controls_section();
 
 		// Content Tab - Display Options Section
@@ -649,23 +681,25 @@ class Taplist_List_Widget extends Widget_Base {
 
 		// Build shortcode attributes
 		$atts = array(
-			'taprooms'         => $taprooms,
-			'layout'           => 'list',
-			'columns'          => '1',
-			'show_filters'     => $settings['show_filters'],
-			'show_search'      => $settings['show_search'],
-			'show_sort'        => $settings['show_sort'],
-			'show_image'       => $settings['show_image'],
-			'show_tap_number'  => $settings['show_tap_number'],
-			'show_style'       => $settings['show_style'],
-			'show_abv'         => $settings['show_abv'],
-			'show_ibu'         => $settings['show_ibu'],
-			'show_description' => $settings['show_description'],
-			'show_containers'  => $settings['show_containers'],
-			'posts_per_page'   => $settings['posts_per_page'],
-			'pagination'       => $settings['pagination'],
-			'order_by'         => $settings['order_by'],
-			'order'            => $settings['order'],
+			'taprooms'           => $taprooms,
+			'layout'             => 'list',
+			'columns'            => '1',
+			'show_filters'       => $settings['show_filters'],
+			'show_search'        => $settings['show_search'],
+			'show_sort'          => $settings['show_sort'],
+			'show_parent_styles' => $settings['show_parent_styles'],
+			'show_child_styles'  => $settings['show_child_styles'],
+			'show_image'         => $settings['show_image'],
+			'show_tap_number'    => $settings['show_tap_number'],
+			'show_style'         => $settings['show_style'],
+			'show_abv'           => $settings['show_abv'],
+			'show_ibu'           => $settings['show_ibu'],
+			'show_description'   => $settings['show_description'],
+			'show_containers'    => $settings['show_containers'],
+			'posts_per_page'     => '-1',
+			'pagination'         => 'no',
+			'order_by'           => $settings['order_by'],
+			'order'              => $settings['order'],
 		);
 
 		// Instantiate shortcode class and render

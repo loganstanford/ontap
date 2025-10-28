@@ -31,25 +31,27 @@ class Shortcode {
 	public function render_taplist( $atts ) {
 		$atts = shortcode_atts(
 			array(
-				'taproom'          => '',
-				'taprooms'         => '',
-				'layout'           => 'grid',
-				'columns'          => '3',
-				'show_filters'     => 'yes',
-				'show_search'      => 'yes',
-				'show_sort'        => 'yes',
-				'show_image'       => 'yes',
-				'show_style'       => 'yes',
-				'show_abv'         => 'yes',
-				'show_ibu'         => 'yes',
-				'show_description' => 'yes',
-				'show_tap_number'  => 'yes',
-				'show_containers'  => 'yes',
-				'show_availability' => 'yes',
-				'posts_per_page'   => '12',
-				'pagination'       => 'yes',
-				'order_by'         => 'tap_number',
-				'order'            => 'ASC',
+				'taproom'            => '',
+				'taprooms'           => '',
+				'layout'             => 'grid',
+				'columns'            => '3',
+				'show_filters'       => 'yes',
+				'show_search'        => 'yes',
+				'show_sort'          => 'yes',
+				'show_image'         => 'yes',
+				'show_style'         => 'yes',
+				'show_abv'           => 'yes',
+				'show_ibu'           => 'yes',
+				'show_description'   => 'yes',
+				'show_tap_number'    => 'yes',
+				'show_containers'    => 'yes',
+				'show_availability'  => 'yes',
+				'show_parent_styles' => 'yes',
+				'show_child_styles'  => 'yes',
+				'posts_per_page'     => '-1',
+				'pagination'         => 'no',
+				'order_by'           => 'tap_number',
+				'order'              => 'ASC',
 			),
 			$atts,
 			'ontap_taplist'
@@ -77,7 +79,7 @@ class Shortcode {
 
 		// Render filters/search
 		if ( $atts['show_filters'] || $atts['show_search'] || $atts['show_sort'] ) {
-			$this->render_controls( $atts );
+			$this->render_controls( $atts, $beers );
 		}
 
 		// Render taplist
@@ -151,11 +153,14 @@ class Shortcode {
 		// Build ORDER BY clause
 		$order_by = $this->get_order_by_clause( $atts['order_by'], $atts['order'] );
 
-		// Pagination
-		$paged        = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
-		$per_page     = intval( $atts['posts_per_page'] );
-		$offset       = ( $paged - 1 ) * $per_page;
-		$limit_clause = $atts['pagination'] ? "LIMIT {$per_page} OFFSET {$offset}" : '';
+		// Pagination - default to showing all beers (-1 means no limit)
+		$limit_clause = '';
+		if ( $atts['pagination'] && intval( $atts['posts_per_page'] ) > 0 ) {
+			$paged    = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
+			$per_page = intval( $atts['posts_per_page'] );
+			$offset   = ( $paged - 1 ) * $per_page;
+			$limit_clause = "LIMIT {$per_page} OFFSET {$offset}";
+		}
 
 		// Build WHERE clause for taprooms
 		$taproom_where = '';
@@ -231,10 +236,11 @@ class Shortcode {
 	/**
 	 * Render control panel (filters, search, sort)
 	 *
-	 * @param array $atts Shortcode attributes.
+	 * @param array $atts  Shortcode attributes.
+	 * @param array $beers Beer objects (to get styles from).
 	 * @return void
 	 */
-	private function render_controls( $atts ) {
+	private function render_controls( $atts, $beers = array() ) {
 		echo '<div class="ontap-controls">';
 
 		// Search
@@ -246,24 +252,42 @@ class Shortcode {
 
 		// Style filters
 		if ( $atts['show_filters'] ) {
-			$styles = get_terms(
-				array(
-					'taxonomy'   => 'ontap_style',
-					'hide_empty' => true,
-				)
-			);
+			// Get unique styles from the current beer list
+			$style_ids = array();
+			foreach ( $beers as $beer ) {
+				if ( ! empty( $beer->styles ) ) {
+					foreach ( $beer->styles as $style ) {
+						$style_ids[ $style->term_id ] = $style;
+					}
+				}
+			}
 
-			if ( ! empty( $styles ) && ! is_wp_error( $styles ) ) {
-				echo '<div class="ontap-filters">';
-				echo '<button class="ontap-filter-btn active" data-style="all">' . esc_html__( 'All Styles', 'ontap' ) . '</button>';
+			if ( ! empty( $style_ids ) ) {
+				// Filter by parent or child styles based on settings
+				$filter_styles = array();
+				$show_parent   = ! isset( $atts['show_parent_styles'] ) || $atts['show_parent_styles'];
+				$show_child    = ! isset( $atts['show_child_styles'] ) || $atts['show_child_styles'];
 
-				foreach ( $styles as $style ) {
-					echo '<button class="ontap-filter-btn" data-style="' . esc_attr( $style->term_id ) . '">';
-					echo esc_html( $style->name );
-					echo '</button>';
+				foreach ( $style_ids as $style ) {
+					$is_parent = ( 0 === $style->parent );
+
+					if ( ( $is_parent && $show_parent ) || ( ! $is_parent && $show_child ) ) {
+						$filter_styles[] = $style;
+					}
 				}
 
-				echo '</div>';
+				if ( ! empty( $filter_styles ) ) {
+					echo '<div class="ontap-filters">';
+					echo '<button class="ontap-filter-btn active" data-style="all">' . esc_html__( 'All Styles', 'ontap' ) . '</button>';
+
+					foreach ( $filter_styles as $style ) {
+						echo '<button class="ontap-filter-btn" data-style="' . esc_attr( $style->term_id ) . '">';
+						echo esc_html( $style->name );
+						echo '</button>';
+					}
+
+					echo '</div>';
+				}
 			}
 		}
 
